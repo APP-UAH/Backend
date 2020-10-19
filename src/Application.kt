@@ -20,6 +20,12 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
+
+    suspend fun userLogin(call: ApplicationCall){
+        call.respond(HttpStatusCode(202, "Logged"), "User logged!")
+    }
+
+
     val server : NettyApplicationEngine = embeddedServer(Netty, port = 8080) {
         install(Locations) {
         }
@@ -56,7 +62,7 @@ fun Application.module(testing: Boolean = false) {
             }
 
             post("/login") {
-
+                userLogin(call)
             }
 
             route("/hoja-de-firmas") {
