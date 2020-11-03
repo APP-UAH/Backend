@@ -24,9 +24,14 @@ fun Application.module(testing: Boolean = false) {
     val server: NettyApplicationEngine = embeddedServer(Netty, port = 8080) {
         install(Locations) {
         }
+        install(Sessions) {
+            cookie<MySession>("MY_SESSION") {
+                cookie.extensions["SameSite"] = "lax"
+            }
+        }
 
 
-
+        // http://localhost:8080/AppUah/users/login
         install(CORS) {
             method(HttpMethod.Options)
             method(HttpMethod.Get)
@@ -39,14 +44,6 @@ fun Application.module(testing: Boolean = false) {
             anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
         }
 
-        install(Locations) {
-        }
-
-        install(Sessions) {
-            cookie<MySession>("MY_SESSION") {
-                cookie.extensions["SameSite"] = "lax"
-            }
-        }
 
         install(Authentication) {
         }

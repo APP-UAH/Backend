@@ -18,7 +18,8 @@ class UserLoginRoute
 @KtorExperimentalLocationsAPI
 fun Route.users(){
 
-    post<UserLoginRoute>{
+    // sustituir por post - preguntar a dani sobre cómo funciona postman para poder probar esto
+    get<UserLoginRoute>{
         call.respond(HttpStatusCode(200, "Accepted"),"Hello there!")
     }
 
