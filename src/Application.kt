@@ -1,9 +1,14 @@
 package com.appuah
 
+<<<<<<< HEAD
 import com.appuah.routes.users
+=======
+import com.appuah.routes.events
+import com.appuah.routes.login
+import com.appuah.routes.signUp
+>>>>>>> cbd703dc5640c251fffc8542e1ecf339110a1058
 import io.ktor.application.*
 import io.ktor.response.*
-import io.ktor.request.*
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.locations.*
@@ -21,7 +26,11 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
 
+<<<<<<< HEAD
     val server: NettyApplicationEngine = embeddedServer(Netty, port = 8080) {
+=======
+    val server : NettyApplicationEngine = embeddedServer(Netty, port = 8080) {
+>>>>>>> cbd703dc5640c251fffc8542e1ecf339110a1058
         install(Locations) {
         }
         install(Sessions) {
@@ -41,7 +50,7 @@ fun Application.module(testing: Boolean = false) {
             method(HttpMethod.Patch)
             header(HttpHeaders.Authorization)
             allowCredentials = true
-            anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+            anyHost()
         }
 
 
@@ -54,8 +63,49 @@ fun Application.module(testing: Boolean = false) {
         }
 
         routing {
+<<<<<<< HEAD
 
             users()
+=======
+
+            login()
+            
+            signUp()
+
+            route("/hoja-de-firmas") {
+
+                get {
+
+                }
+
+                patch {
+
+                }
+
+            }
+
+            route("/reservas") {
+
+                get {
+
+                }
+
+                post {
+
+                }
+
+                patch {
+
+                }
+
+                delete {
+
+                }
+
+            }
+
+            events()
+>>>>>>> cbd703dc5640c251fffc8542e1ecf339110a1058
 
         }
     }
