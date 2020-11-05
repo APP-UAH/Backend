@@ -11,7 +11,8 @@ data class Professor(
     val username: String,
     val password: String,
     val name: String,
-    val phoneNumber: Int,
+    val surname: String,
+    val phoneNumber: String,
     val email: String,
     val office:String
 ): Serializable, Principal

@@ -14,11 +14,10 @@ object DatabaseFactory {
     fun init() {
         Database.connect(hikari())
 
-        /*transaction {
+        transaction {
             // nosotros ya tenemos creada la base de datos
-            SchemaUtils.create(Users)
-            SchemaUtils.create(Todos)
-        }*/
+            SchemaUtils.create(Professors)
+        }
     }
 
     private fun hikari(): HikariDataSource {
