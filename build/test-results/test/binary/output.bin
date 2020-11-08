@@ -1,0 +1,2 @@
+…2020-11-08 10:24:44.709 [Test worker] INFO  ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active
+Œ2020-11-08 10:24:44.726 [Test worker] INFO  ktor.application - No ktor.deployment.watch patterns specified, automatic reload is not active
