@@ -7,7 +7,7 @@ private var nombre:String = ""
 
 
 // docu: https://devexperto.com/data-classes-kotlin/
-data class Professor(
+data class ProfessorUniversidad(
     val username: String,
     val password: String,
     val name: String,

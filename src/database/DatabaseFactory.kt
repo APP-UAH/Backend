@@ -16,7 +16,7 @@ object DatabaseFactory {
 
         transaction {
             // nosotros ya tenemos creada la base de datos
-            SchemaUtils.create(Professors)
+            //SchemaUtils.create(Professors)
         }
     }
 
