@@ -3,7 +3,11 @@ package models
 import io.ktor.auth.Principal
 import java.io.Serializable
 
-data class User(
-    val userId: Int,
-    val email: String,
-    val passwordHash: String) : Serializable, Principal
+data abstract class User(
+        val username: String,
+        val password: String,
+        val name: String,
+        val surname: String,
+        val phoneNumber: String,
+        val email: String,
+): Serializable, Principal

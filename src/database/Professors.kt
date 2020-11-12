@@ -12,7 +12,5 @@ object Professors : Table() {
     val phoneNumber = varchar("phone_number",9)
     val email = varchar("email",256)
     val office = varchar("office",256)
-
-
 }
 
