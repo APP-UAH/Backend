@@ -4,7 +4,7 @@ import io.ktor.auth.*
 import java.io.Serializable
 
 // docu: https://devexperto.com/data-classes-kotlin/
-data class Professor : Users(
+data class ProfessorUniversidad(
     val username: String,
     val password: String,
     val name: String,
@@ -12,15 +12,7 @@ data class Professor : Users(
     val phoneNumber: String,
     val email: String,
     val office:String
-): Serializable, Principal
-
-//ruta de ver listas de asistencia
-//json username salvador oton
-// select from Listas where username = salvadorOton
-
-ver lista de asistencia
-
-    this.username
+): Serializable, Principal, Person(username, password, name, surname, phoneNumber, email)
 
 // serializable es un patrón marker interface
 

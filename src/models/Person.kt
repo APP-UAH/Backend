@@ -3,7 +3,7 @@ package models
 import io.ktor.auth.Principal
 import java.io.Serializable
 
-data abstract class User(
+abstract class Person(
         val username: String,
         val password: String,
         val name: String,

@@ -1,7 +1,6 @@
 package com.appuah.database
 
-import com.appuah.database.Professors.primaryKey
-import com.appuah.models.Professor
+import com.appuah.models.ProfessorUniversidad
 
 interface DatabaseInterface {
 
@@ -10,5 +9,5 @@ interface DatabaseInterface {
 
 
 
-    suspend fun addProfessor(username: String, password: String, name: String, surname: String, phoneNumber: String, email: String, office: String): Professor?
+    suspend fun addProfessor(username: String, password: String, name: String, surname: String, phoneNumber: String, email: String, office: String): ProfessorUniversidad?
 }

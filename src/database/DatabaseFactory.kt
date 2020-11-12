@@ -15,9 +15,6 @@ object DatabaseFactory {
         Database.connect(hikari())
 
         transaction {
-            // nosotros ya tenemos creada la base de datos
-            // SchemaUtils.create(Professors)
-            
         }
     }
 

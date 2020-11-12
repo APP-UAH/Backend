@@ -1,9 +1,7 @@
 package com.appuah.database
 
 import com.appuah.database.DatabaseFactory.dbQuery
-import com.appuah.database.Professors.username
-import com.appuah.models.Professor
-import models.User
+import com.appuah.models.ProfessorUniversidad
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -12,35 +10,47 @@ class TodoDatabaseInterface : DatabaseInterface {
 
 
     override suspend fun addProfessor(username: String,password: String,name: String, surname:String, phoneNumber:String,
-                                 email:String, office:String): Professor? {
+                                 email:String, office:String): ProfessorUniversidad? {
         var statement: InsertStatement<Number>? = null
+
         dbQuery {
-            statement = Professors.insert {
-                it[Professors.username] = username
-                it[Professors.password] = password
-                it[Professors.name] = name
-                it[Professors.surname] = surname
-                it[Professors.phoneNumber] = phoneNumber
-                it[Professors.email] = email
-                it[Professors.office] = office
+
+            statement = Professor.insert{
+                it[Professor.username] = username
+                it[Professor.password] = password
+                it[Professor.name] = name
+                it[Professor.surname] = surname
+                it[Professor.phoneNumber] = phoneNumber
+                it[Professor.email] = email
+                it[Professor.office] = office
             }
         }
         return rowToProfessor(statement?.resultedValues?.get(0))
     }
 
-    private fun rowToProfessor(get: ResultRow?): Professor? {
+    override suspend fun selectProfessor(username: String): ProfessorUniversidad? {
+        var statement: SelectStatement<Number>? = null
+
+        dbQuery {
+
+            statement = Professor.select{Professor.username.eq(username)}
+        }
+        return rowToProfessor(statement?.resultedValues?.get(0))
+    }
+
+    private fun rowToProfessor(get: ResultRow?): ProfessorUniversidad? {
         if (get == null) {
             return null
         }
-        return Professor(
+        return ProfessorUniversidad(
                 // checar alt intro
-                username = get[Professors.username],
-                password = get[Professors.password],
-                name = get[Professors.name],
-                surname = get[Professors.surname],
-                phoneNumber = get[Professors.phoneNumber],
-                email = get[Professors.email],
-                office = get[Professors.office],
+                username = get[Professor.username],
+                password = get[Professor.password],
+                name = get[Professor.name],
+                surname = get[Professor.surname],
+                phoneNumber = get[Professor.phoneNumber],
+                email = get[Professor.email],
+                office = get[Professor.office],
         )
     }
 

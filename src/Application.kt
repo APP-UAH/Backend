@@ -1,12 +1,13 @@
 package com.appuah
 
 
+import com.appuah.database.DatabaseFactory
+import com.appuah.database.TodoDatabaseInterface
 import com.appuah.routes.users
 import com.appuah.routes.events
 import com.appuah.routes.login
 import com.appuah.routes.signUp
 import io.ktor.application.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.locations.*
@@ -16,7 +17,6 @@ import io.ktor.gson.*
 import io.ktor.features.*
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.*
-import io.ktor.http.content.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -50,6 +50,7 @@ fun Application.module(testing: Boolean = false) {
 
 
         install(Authentication) {
+            //añadir autenticación
         }
 
         install(ContentNegotiation) {
@@ -57,15 +58,19 @@ fun Application.module(testing: Boolean = false) {
             }
         }
 
+        DatabaseFactory.init()
+        val db = TodoDatabaseInterface()
+
+
+
+
         routing {
 
-            users()
+            users(db)
 
             login()
 
             signUp()
-
-
 
             events()
 
