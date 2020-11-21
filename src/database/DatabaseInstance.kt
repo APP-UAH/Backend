@@ -1,19 +1,20 @@
 package com.appuah.database
 
-import com.appuah.database.DatabaseFactory.dbQuery
+
 import com.appuah.models.ProfessorUniversidad
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
-class TodoDatabaseInterface : DatabaseInterface {
+class DatabaseInstance(override val dbConection: DatabaseSingleton) : DatabaseInterface {
+
 
 
     override suspend fun addProfessor(username: String,password: String,name: String, surname:String, phoneNumber:String,
                                  email:String, office:String): ProfessorUniversidad? {
         var statement: InsertStatement<Number>? = null
 
-        dbQuery {
+        this.dbConection.dbQuery {
 
 
 

@@ -1,14 +1,13 @@
 package com.appuah.routes
 
 import com.appuah.API
+import com.appuah.database.DatabaseInstance
 import com.appuah.database.DatabaseInterface
-import com.appuah.database.TodoDatabaseInterface
 import io.ktor.application.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.Route
-import io.ktor.sessions.*
 
 const val USERS="$API/users"
 const val USER_LOGIN="$USERS/login"
@@ -25,7 +24,7 @@ class UserCreateRoute
 
 @KtorExperimentalLocationsAPI
 fun Route.users(
-    db: DatabaseInterface
+    db: DatabaseInstance
 ){
 
     // sustituir por post - preguntar a dani sobre cómo funciona postman para poder probar esto
@@ -37,7 +36,7 @@ fun Route.users(
 
 
         try {
-            db.addProfessor("Fermin68","patrones", "Fermín","Trujillo",
+            db.addProfessor("Daniel","patrones", "Fermín","Trujillo",
             "626458344","fermin.trujillo@uah.es","N304")
             /*newUser?.userId?.let {
                 call.sessions.set(MySession(it))

@@ -8,6 +8,8 @@ interface DatabaseInterface {
     // to-do pasa por aquí 
 
 
+    val dbConection:DatabaseSingleton
 
     suspend fun addProfessor(username: String, password: String, name: String, surname: String, phoneNumber: String, email: String, office: String): ProfessorUniversidad?
+
 }

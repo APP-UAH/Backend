@@ -11,13 +11,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
 
+    val databaseSingleton = DatabaseSingleton()
+
     fun init() {
         Database.connect(hikari())
 
-        transaction {
-            // nosotros ya tenemos creada la base de datos
-            //SchemaUtils.create(Professors)
-        }
+
     }
 
     private fun hikari(): HikariDataSource {
@@ -48,10 +47,18 @@ object DatabaseFactory {
         return HikariDataSource(config)
     }
 
-    // info (coroutines) de esta función en: https://kotlinlang.org/docs/reference/coroutines/coroutines-guide.html
-    suspend fun <T> dbQuery(
-        block: () -> T): T =
-        withContext(Dispatchers.IO) {
-            transaction { block() }
-        }
+    fun createInstance ():DatabaseInstance{
+
+        return DatabaseInstance(this.databaseSingleton)
+    }
+
+    /*
+    * dbQuery tiene que ser un objeto de DatabaseFactory
+    * createDatabaseInstance(dbQuery)
+    *
+    * */
+
+
+
+
 }

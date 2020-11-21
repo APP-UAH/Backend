@@ -2,7 +2,7 @@ package com.appuah
 
 
 import com.appuah.database.DatabaseFactory
-import com.appuah.database.TodoDatabaseInterface
+import com.appuah.database.DatabaseInstance
 import com.appuah.routes.users
 import com.appuah.routes.events
 import com.appuah.routes.login
@@ -59,7 +59,7 @@ fun Application.module(testing: Boolean = false) {
         }
 
         DatabaseFactory.init()
-        val db = TodoDatabaseInterface()
+        val db = DatabaseFactory.createInstance()
 
 
 
