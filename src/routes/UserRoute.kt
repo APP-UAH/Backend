@@ -37,8 +37,12 @@ fun Route.users(db: ProfessorInstance){
     // sustituir por post - preguntar a dani sobre cómo funciona postman para poder probar esto
 
     get<UserGetRoute>{
-        db.getProfessor("Fermin")
-        call.respond(HttpStatusCode(200, "Accepted"),"Hello there!")
+        var answer = db.getProfessor("Fermin")
+        if (answer != null) {
+            call.respond(HttpStatusCode.Accepted, answer.username)
+        } else {
+            call.respond(HttpStatusCode.BadRequest, "puta mierda")
+        }
     }
 
     post<UserCreateRoute>{

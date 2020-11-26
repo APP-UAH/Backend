@@ -12,7 +12,7 @@ data class ProfessorUniversidad(
     val phoneNumber: String,
     val email: String,
     val office:String
-): Serializable, Principal, Person(username, password, name, surname, phoneNumber, email)
+): Serializable, Principal
 
 // serializable es un patrón marker interface
 
