@@ -35,16 +35,20 @@ class UserUpdateRoute
 fun Route.users(db: ProfessorInstance){
 
     // sustituir por post - preguntar a dani sobre cómo funciona postman para poder probar esto
+
     get<UserGetRoute>{
-        db.getProfessor("Daniel")
+        db.getProfessor("Fermin")
         call.respond(HttpStatusCode(200, "Accepted"),"Hello there!")
     }
 
     post<UserCreateRoute>{
 
         try {
-            db.addProfessor("Daniel","patrones", "Fermín","Trujillo",
+            var answer = db.addProfessor("Fermin68","patrones", "Fermín","Trujillo",
             "626458344","fermin.trujillo@uah.es","N304")
+            if (answer != null) {
+                call.respond(HttpStatusCode.Created, answer.username)
+            }
             /*newUser?.userId?.let {
                 call.sessions.set(MySession(it))
                 call.respondText(jwtService.generateToken(newUser), status = HttpStatusCode.Created)

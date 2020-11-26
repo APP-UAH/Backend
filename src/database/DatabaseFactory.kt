@@ -16,7 +16,6 @@ object DatabaseFactory {
     fun init() {
         Database.connect(hikari())
 
-
     }
 
     private fun hikari(): HikariDataSource {
@@ -47,9 +46,8 @@ object DatabaseFactory {
         return HikariDataSource(config)
     }
 
-    fun createInstance ():DatabaseInstance{
-
-        return DatabaseInstance(this.databaseSingleton)
+    fun createProfessorInstance ():ProfessorInstance{
+        return ProfessorInstance(this.databaseSingleton)
     }
 
     /*

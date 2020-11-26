@@ -59,14 +59,12 @@ fun Application.module(testing: Boolean = false) {
         }
 
         DatabaseFactory.init()
-        val db = DatabaseFactory.createInstance()
-
-
+        val dbProfessor = DatabaseFactory.createProfessorInstance()
 
 
         routing {
 
-            users(db)
+            users(dbProfessor)
 
             login()
 

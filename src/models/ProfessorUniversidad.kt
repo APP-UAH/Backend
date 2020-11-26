@@ -3,9 +3,6 @@ package com.appuah.models
 import io.ktor.auth.*
 import java.io.Serializable
 
-private var nombre:String = ""
-
-
 // docu: https://devexperto.com/data-classes-kotlin/
 data class ProfessorUniversidad(
     val username: String,
@@ -15,7 +12,7 @@ data class ProfessorUniversidad(
     val phoneNumber: String,
     val email: String,
     val office:String
-): Serializable, Principal
+): Serializable, Principal, Person(username, password, name, surname, phoneNumber, email)
 
 // serializable es un patrón marker interface
 
