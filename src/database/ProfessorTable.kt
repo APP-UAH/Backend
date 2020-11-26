@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 
 
-object Professor : Table() {
+object ProfessorTable : Table() {
     val username = varchar("username",256).primaryKey()
     val password = varchar("password",256)
     val name = varchar("name",256)

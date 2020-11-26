@@ -8,9 +8,7 @@ class DatabaseSingleton() {
 
 
     // info (coroutines) de esta función en: https://kotlinlang.org/docs/reference/coroutines/coroutines-guide.html
-    suspend fun <T> dbQuery(
-            block: () -> T): T =
-            withContext(Dispatchers.IO) {
-                transaction { block() }
-            }
+    suspend fun <T> dbQuery(block: () -> T): T = withContext(Dispatchers.IO) {
+            transaction { block() }
+        }
 }
