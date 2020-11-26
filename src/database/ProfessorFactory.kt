@@ -12,5 +12,5 @@ interface ProfessorFactory {
 
     suspend fun addProfessor(username: String, password: String, name: String, surname: String, phoneNumber: String, email: String, office: String): ProfessorUniversidad?
     suspend fun getProfessor(username: String): ProfessorUniversidad?
-    suspend fun getAllProfessor(): ArrayList<ProfessorUniversidad>?
+    suspend fun getAllProfessor(): List<ProfessorUniversidad?>
 }
