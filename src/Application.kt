@@ -55,6 +55,7 @@ fun Application.module(testing: Boolean = false) {
 
         install(ContentNegotiation) {
             gson {
+                setPrettyPrinting()
             }
         }
 
@@ -66,7 +67,7 @@ fun Application.module(testing: Boolean = false) {
 
             users(dbProfessor)
 
-            login()
+            login(dbProfessor)
 
             signUp()
 

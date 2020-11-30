@@ -3,6 +3,7 @@ package com.appuah.database
 
 import com.appuah.models.ProfessorUniversidad
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.InsertSelectStatement
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
@@ -32,7 +33,7 @@ class ProfessorInstance(override val dbConection: DatabaseSingleton) : Professor
 
         var answer = this.dbConection.dbQuery {
             ProfessorTable.select{ ProfessorTable.username.eq(username)}
-                .map { rowToProfessor(it) }?.singleOrNull()
+                    .map { rowToProfessor(it) }.singleOrNull()
         }
 
         return answer
@@ -40,9 +41,9 @@ class ProfessorInstance(override val dbConection: DatabaseSingleton) : Professor
 
     override suspend fun getAllProfessor(): List<ProfessorUniversidad?> {
 
-        var answer = (this.dbConection.dbQuery {
-            ProfessorTable.selectAll().map { rowToProfessor(it)}
-        })
+        var answer = this.dbConection.dbQuery {
+            ProfessorTable.selectAll().map { rowToProfessor(it) }
+        }
 
         return answer
     }

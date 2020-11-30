@@ -10,6 +10,7 @@ import io.ktor.routing.Route
 
 const val USERS="$API/users"
 const val USER_GET="$USERS/get"
+const val USER_SELECT_ALL="$USERS/select_all"
 const val USER_CREATE="$USERS/signup"
 const val USER_DELETE="$USERS/delete"
 const val USER_UPDATE="$USERS/update"
@@ -32,14 +33,28 @@ class UserDeleteRoute
 class UserUpdateRoute
 
 @KtorExperimentalLocationsAPI
+@Location(USER_SELECT_ALL)
+class UserSelectAllRoute
+
+@KtorExperimentalLocationsAPI
 fun Route.users(db: ProfessorInstance){
 
     // sustituir por post - preguntar a dani sobre cómo funciona postman para poder probar esto
 
     get<UserGetRoute>{
-        var answer = db.getProfessor("Fermin")
+        var answer = db.getProfessor("Fermin68")
         if (answer != null) {
             call.respond(HttpStatusCode.Accepted, answer.username)
+        } else {
+            call.respond(HttpStatusCode.BadRequest, "puta mierda")
+        }
+
+    }
+
+    get<UserSelectAllRoute>{
+        var answer = db.getAllProfessor()
+        if (answer != null) {
+            call.respond(HttpStatusCode.Accepted, answer)
         } else {
             call.respond(HttpStatusCode.BadRequest, "puta mierda")
         }
