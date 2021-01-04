@@ -17,5 +17,18 @@ class SignUpRoutes
 fun Route.signUp(){
     post<SignUpRoutes>{
 
+
+
     }
+    /*
+    * Json = {
+    *   username: string,
+    *   password: string,
+    *   ...
+    *   role: [admin,alumn,professor]
+    *
+    *
+    *
+    *
+    * */
 }

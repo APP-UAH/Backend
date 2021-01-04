@@ -65,6 +65,7 @@ fun Application.module(testing: Boolean = false) {
 
         routing {
 
+
             users(dbProfessor)
 
             login(dbProfessor)

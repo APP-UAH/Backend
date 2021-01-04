@@ -5,8 +5,11 @@ import org.jetbrains.exposed.sql.Table
 
 
 object ProfessorTable : Table() {
+
+
     val username = varchar("username",256).primaryKey()
     val password = varchar("password",256)
+    val role = varchar("role",256)
     val name = varchar("name",256)
     val surname = varchar("surname",256)
     val phoneNumber = varchar("phone_number",9)

@@ -1,6 +1,7 @@
 package com.appuah.routes
 
 import com.appuah.API
+import com.appuah.database.DatabaseFactory
 import com.appuah.database.ProfessorInstance
 import io.ktor.application.*
 import io.ktor.http.HttpStatusCode
@@ -62,6 +63,7 @@ fun Route.users(db: ProfessorInstance){
 
     post<UserCreateRoute>{
 
+
         try {
             var answer = db.addProfessor("Fermin68","patrones", "Fermín","Trujillo",
             "626458344","fermin.trujillo@uah.es","N304")
@@ -76,6 +78,18 @@ fun Route.users(db: ProfessorInstance){
             application.log.error("Failed to register user", e)
             call.respond(HttpStatusCode.BadRequest, "Problems creating User")
         }
+
+    }
+
+    put<UserUpdateRoute>{
+
+        try{
+            // todo 
+        }catch (e: Throwable) {
+            application.log.error("Failed to register user", e)
+            call.respond(HttpStatusCode.BadRequest, "Problems updating User")
+        }
+
 
     }
 

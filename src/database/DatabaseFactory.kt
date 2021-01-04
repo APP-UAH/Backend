@@ -50,6 +50,8 @@ object DatabaseFactory {
         return ProfessorInstance(this.databaseSingleton)
     }
 
+
+    //fun createDatabaseInstance()
     /*
     * dbQuery tiene que ser un objeto de DatabaseFactory
     * createDatabaseInstance(dbQuery)

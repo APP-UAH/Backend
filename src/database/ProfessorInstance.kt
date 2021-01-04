@@ -1,17 +1,18 @@
 package com.appuah.database
 
 
-import com.appuah.models.ProfessorUniversidad
+import com.appuah.models.Professor
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.statements.InsertSelectStatement
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.statements.StatementType
 
 class ProfessorInstance(override val dbConection: DatabaseSingleton) : ProfessorFactory {
 
 
     override suspend fun addProfessor(username: String,password: String,name: String, surname:String, phoneNumber:String,
-                                 email:String, office:String): ProfessorUniversidad? {
+                                 email:String, office:String): Professor? {
 
         var statement: InsertStatement<Number>? = null
 
@@ -29,7 +30,28 @@ class ProfessorInstance(override val dbConection: DatabaseSingleton) : Professor
         return rowToProfessor(statement?.resultedValues?.get(0))
     }
 
-    override suspend fun getProfessor(username: String): ProfessorUniversidad? {
+    override suspend fun updateProfessor(prevUsername:String, professor:Professor): Professor? {
+
+
+        var answer=ProfessorTable.update({ProfessorTable.username.eq(prevUsername)}){
+            it[ProfessorTable.username] = professor.username
+            it[ProfessorTable.password] = professor.password
+            it[ProfessorTable.name] = professor.name
+            it[ProfessorTable.surname] = professor.surname
+            it[ProfessorTable.phoneNumber] = professor.phoneNumber
+            it[ProfessorTable.email] = professor.email
+            it[ProfessorTable.office] = professor.office
+        }
+
+        return getProfessor(professor.username)
+
+    }
+
+    override suspend fun deleteProfessor(username: String): Professor? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getProfessor(username: String): Professor? {
 
         var answer = this.dbConection.dbQuery {
             ProfessorTable.select{ ProfessorTable.username.eq(username)}
@@ -39,7 +61,7 @@ class ProfessorInstance(override val dbConection: DatabaseSingleton) : Professor
         return answer
     }
 
-    override suspend fun getAllProfessor(): List<ProfessorUniversidad?> {
+    override suspend fun getAllProfessor(): List<Professor?> {
 
         var answer = this.dbConection.dbQuery {
             ProfessorTable.selectAll().map { rowToProfessor(it) }
@@ -48,14 +70,32 @@ class ProfessorInstance(override val dbConection: DatabaseSingleton) : Professor
         return answer
     }
 
-    private fun rowToProfessor(get: ResultRow?): ProfessorUniversidad? {
+    override suspend fun login(username: String, password: String): Boolean? {
+
+        return try{
+            val answer = this.dbConection.dbQuery {
+                ProfessorTable.select{ ProfessorTable.username.eq(username) and ProfessorTable.password.eq(password)}
+                        .map { rowToProfessor(it) }.singleOrNull()
+            }
+            println(answer)
+            true;
+
+        } catch (e: Exception){
+            println(e)
+            false;
+        }
+
+    }
+
+    private fun rowToProfessor(get: ResultRow?): Professor? {
         if (get == null) {
             return null
         }
-        return ProfessorUniversidad(
+        return Professor(
                 // checar alt intro
                 username = get[ProfessorTable.username],
                 password = get[ProfessorTable.password],
+                role = get[ProfessorTable.role],
                 name = get[ProfessorTable.name],
                 surname = get[ProfessorTable.surname],
                 phoneNumber = get[ProfessorTable.phoneNumber],
