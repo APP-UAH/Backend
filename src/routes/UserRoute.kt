@@ -39,8 +39,6 @@ class UserSelectAllRoute
 @KtorExperimentalLocationsAPI
 fun Route.users(db: ProfessorInstance){
 
-    // sustituir por post - preguntar a dani sobre cómo funciona postman para poder probar esto
-
     get<UserGetRoute>{
         var answer = db.getProfessor("Fermin68")
         if (answer != null) {
