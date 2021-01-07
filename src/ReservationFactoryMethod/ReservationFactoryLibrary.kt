@@ -1,7 +1,7 @@
 package com.appuah.Factories
 
-import com.appuah.models.Reservation
-import com.appuah.models.ReservationLibrary
+import com.appuah.ReservationEntities.Reservation
+import com.appuah.ReservationEntities.ReservationLibrary
 
 class ReservationFactoryLibrary : ReservationFactory() {
 

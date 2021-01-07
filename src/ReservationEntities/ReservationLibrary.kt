@@ -1,4 +1,4 @@
-package com.appuah.models
+package com.appuah.ReservationEntities
 
 class ReservationLibrary(): Reservation {
     override var id: Int
@@ -35,9 +35,5 @@ class ReservationLibrary(): Reservation {
 
     override fun isAccepted(): Boolean {
         return accepted
-    }
-
-    override fun updateReservationInDDBB(reservationData: Reservation /*instancia conexion DDBB*/){
-
     }
 }

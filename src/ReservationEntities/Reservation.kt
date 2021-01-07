@@ -1,4 +1,4 @@
-package com.appuah.models
+package com.appuah.ReservationEntities
 
 interface Reservation {
     var id: Int
@@ -7,6 +7,5 @@ interface Reservation {
     var end: String
 
     fun isAccepted(): Boolean
-    fun updateReservationInDDBB(reservationData: Reservation)
 
 }
