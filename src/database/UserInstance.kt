@@ -1,14 +1,12 @@
 package com.appuah.database
 
 
-import com.appuah.models.Professor
+import com.appuah.userfactory.Professor
+import com.appuah.userfactory.UserFactory
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.statements.StatementType
 
-class ProfessorInstance(override val dbConection: DatabaseSingleton) : ProfessorFactory {
+class UserInstance(override val dbConection: DatabaseSingleton) : UserFactory {
 
 
     override suspend fun addProfessor(username: String,password: String,name: String, surname:String, phoneNumber:String,
@@ -95,7 +93,7 @@ class ProfessorInstance(override val dbConection: DatabaseSingleton) : Professor
                 // checar alt intro
                 username = get[ProfessorTable.username],
                 password = get[ProfessorTable.password],
-                role = get[ProfessorTable.role],
+                type = get[ProfessorTable.type],
                 name = get[ProfessorTable.name],
                 surname = get[ProfessorTable.surname],
                 phoneNumber = get[ProfessorTable.phoneNumber],

@@ -1,8 +1,7 @@
 package com.appuah.routes
 
 import com.appuah.API
-import com.appuah.database.DatabaseFactory
-import com.appuah.database.ProfessorInstance
+import com.appuah.database.UserInstance
 import io.ktor.application.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
@@ -38,7 +37,7 @@ class UserUpdateRoute
 class UserSelectAllRoute
 
 @KtorExperimentalLocationsAPI
-fun Route.users(db: ProfessorInstance){
+fun Route.users(db: UserInstance){
 
     // sustituir por post - preguntar a dani sobre cómo funciona postman para poder probar esto
 

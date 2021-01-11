@@ -1,11 +1,10 @@
 package com.appuah.routes
 
 import com.appuah.API
-import com.appuah.database.ProfessorInstance
+import com.appuah.database.UserInstance
 import com.appuah.entities.LoginRequest
 import com.appuah.entities.LoginResponse
 import io.ktor.application.call
-import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.respond
@@ -18,7 +17,7 @@ const val login = "$API/login"
 class LoginRoute
 
 @KtorExperimentalLocationsAPI
-fun Route.login(db: ProfessorInstance){
+fun Route.login(db: UserInstance){
     post<LoginRoute>{
         val loginRequest = call.receive<LoginRequest>()
 

@@ -2,7 +2,6 @@ package com.appuah
 
 
 import com.appuah.database.DatabaseFactory
-import com.appuah.database.ProfessorInstance
 import com.appuah.routes.users
 import com.appuah.routes.events
 import com.appuah.routes.login

@@ -2,11 +2,7 @@ package com.appuah.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 
 
 object DatabaseFactory {
@@ -46,8 +42,8 @@ object DatabaseFactory {
         return HikariDataSource(config)
     }
 
-    fun createProfessorInstance ():ProfessorInstance{
-        return ProfessorInstance(this.databaseSingleton)
+    fun createProfessorInstance ():UserInstance{
+        return UserInstance(this.databaseSingleton)
     }
 
 
