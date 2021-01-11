@@ -2,6 +2,7 @@ package com.appuah.database
 
 
 import com.appuah.userfactory.Professor
+import com.appuah.userfactory.ProfessorTable
 import com.appuah.userfactory.UserFactory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -24,6 +25,7 @@ class UserInstance(override val dbConection: DatabaseSingleton) : UserFactory {
                 it[ProfessorTable.email] = email
                 it[ProfessorTable.office] = office
             }
+
         }
         return rowToProfessor(statement?.resultedValues?.get(0))
     }
