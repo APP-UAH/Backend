@@ -1,39 +1,14 @@
 package com.appuah.ReservationEntities
 
-class ReservationSubject() : Reservation {
-    override var id: Int
-        get() {
-            return this.id
-        }
-        set(value) {
-            this.id = value
-        }
-
-    override var accepted: Boolean
-        get() {
-            return this.accepted
-        }
-        set(value) {
-            this.accepted = value
-        }
-
-    override var begin: String
-        get() {
-            return this.begin
-        }
-        set(value) {
-            this.begin = value
-        }
-
-    override var end: String
-        get() {
-            return this.end
-        }
-        set(value) {
-            this.end = value
-        }
+class ReservationSubject(override var id: Int, override var accepted: Boolean, override var begin: String, override var end: String) : Reservation {
 
     override fun isAccepted(): Boolean {
         return accepted
     }
+
+    override fun toString(): String {
+        return "ReservationSubject(id=$id, accepted=$accepted, begin='$begin', end='$end')"
+    }
+
+
 }

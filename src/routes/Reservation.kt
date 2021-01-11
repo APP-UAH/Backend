@@ -1,6 +1,7 @@
 package com.appuah.routes
 
 import com.appuah.API
+import com.appuah.Factories.ReservationFactory
 import com.appuah.database.ProfessorInstance
 import io.ktor.application.*
 import io.ktor.http.HttpStatusCode
@@ -46,5 +47,25 @@ class LibraryGetRoute
 @Location(SUBJECT_POST)
 class SubjectPostRoute
 
+@KtorExperimentalLocationsAPI
+fun Route.users(db: ProfessorInstance){
+
+    get<Library>{
+        val factoria = ReservationFactory.getReservation("Library")
+        val reserva = factoria?.createReservation(1, false, "hoy", "mañana")
+        println(reserva.toString())
+        println(reserva?.id)
+        reserva?.id = 2
+        println(reserva?.id)
+    }
+
+    get<UserSelectAllRoute>{
+        var answer = db.getAllProfessor()
+        if (answer != null) {
+            call.respond(HttpStatusCode.Accepted, answer)
+        } else {
+            call.respond(HttpStatusCode.BadRequest, "puta mierda")
+        }
+    }
 
 //Distintos endpoint para los distintos tipos de reservas o un campo en el json¿?
