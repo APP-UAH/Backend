@@ -1,13 +1,13 @@
 package com.appuah.UserAbstractFactory
 
+import com.appuah.UserEntities.AdminExternalUser
+import com.appuah.UserEntities.AdminInternalUser
 import com.appuah.UserEntities.ProfessorExternalUser
 import com.appuah.UserEntities.ProfessorInternalUser
-import com.appuah.UserEntities.StudentExternalUser
-import com.appuah.UserEntities.StudentInternalUser
 import com.appuah.userentities.ExternalUser
 import com.appuah.userentities.InternalUser
 
-class ConcreteProfessorFactory:AbstractFactory {
+class ConcreteAdminFactory:AbstractFactory {
 
     override fun createInternalUser(
         username: String,
@@ -16,7 +16,7 @@ class ConcreteProfessorFactory:AbstractFactory {
     ): InternalUser {
 
 
-        return ProfessorInternalUser(username, password, type)
+        return AdminInternalUser(username, password, type)
     }
 
 
@@ -27,7 +27,8 @@ class ConcreteProfessorFactory:AbstractFactory {
         university:String
     ): ExternalUser {
 
-        return ProfessorExternalUser(username, password, type, university)
+        return AdminExternalUser(username, password, type, university)
     }
+
 
 }
