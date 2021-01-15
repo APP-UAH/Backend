@@ -10,6 +10,8 @@ import org.jetbrains.exposed.sql.statements.InsertStatement
 class UserInstance(override val dbConection: DatabaseSingleton) : UserFactory {
 
 
+
+
     override suspend fun addProfessor(username: String,password: String,name: String, surname:String, phoneNumber:String,
                                  email:String, office:String): Professor? {
 
