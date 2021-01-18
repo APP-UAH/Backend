@@ -1,46 +1,76 @@
 package com.appuah.Builder
 
-class UserBuilder private constructor(
-    val username: String?,
-    val password: String?,
-    val type: Int?,
-    val name: String?,
-    val surname: String?,
-    val email: String?,
-    val office: String?,
-    val isAssociated: Boolean?,
-    val isDeputy: Boolean?
-) {
-    data class Builder(
-        var username: String? = null,
-        var password: String? = null,
-        var type: Int? = null,
-        var name: String? = null,
-        var surname: String? = null,
-        var email: String? = null,
-        var office: String? = null,
-        var isAssociated: Boolean? = null,
-        var isDeputy: Boolean? = null
-    ) {
+import com.appuah.Builder.User.Builder
 
-        fun username(username: String) = apply { this.username = username }
 
-        fun password(password: String) = apply { this.password = password }
+class UserBuilder {
 
-        fun type(type: Int) = apply { this.type = type }
+    // el mediator tendrá que implementar un if para elegir qué función escoge
 
-        fun name(name: String) = apply { this.name = name }
+    companion object {
 
-        fun surname(surname: String) = apply { this.surname = surname }
+        fun constructProfessor(
+            username: String,
+            password: String,
+            type: Int,
+            name: String,
+            surname: String,
+            email: String,
+            office: String,
+            isAssociated: Boolean
+        ): User {
+            val professor = User.Builder()
+                .username(username)
+                .password(password)
+                .type(type)
+                .name(name)
+                .surname(surname)
+                .email(email)
+                .office(office)
+                .isAssociated(isAssociated)
+                .build()
 
-        fun email(username: String) = apply { this.email = email }
 
-        fun office(username: String) = apply { this.office = office }
+            return professor
 
-        fun isAssociated(isAssociated: Boolean) = apply { this.isAssociated = isAssociated }
+            // en teoría este sería el objeto que le entregaríamos al DAO para hacer el insert (?)
+            // professorDAO.insert(preofessor)
+        }
 
-        fun isDeputy(isDeputy: Boolean) = apply { this.isDeputy = isDeputy }
+        fun constructStudent(
+            username: String,
+            password: String,
+            type: Int,
+            name: String,
+            surname: String,
+            email: String,
+            isDeputy: Boolean
+        ): User {
+            val student = User.Builder()
+                .username(username)
+                .password(password)
+                .type(type)
+                .name(name)
+                .surname(surname)
+                .email(email)
+                .isDeputy(isDeputy)
+                .build()
+            return student
+        }
 
-        fun build() = UserBuilder(username, password, type, name, surname, email, office, isAssociated, isDeputy)
+        fun constructAdmin(
+            username: String,
+            password: String,
+            type: Int
+        ): User {
+
+            val admin = User.Builder()
+                .username(username)
+                .password(password)
+                .type(type)
+                .build()
+            return admin
+        }
+
     }
 }
