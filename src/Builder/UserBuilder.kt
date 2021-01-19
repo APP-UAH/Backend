@@ -5,11 +5,14 @@ import com.appuah.Builder.User.Builder
 
 class UserBuilder {
 
-    // el mediator tendrá que implementar un if para elegir qué función escoge
+    /*
+    Companion lo utilizamos para englobar todos los métodos que serán invocador por otras clases
+    así como sus propiedades estáticas
+     */
 
     companion object {
 
-        fun constructProfessor(
+        fun buildProfessor(
             username: String,
             password: String,
             type: Int,
@@ -19,6 +22,12 @@ class UserBuilder {
             office: String,
             isAssociated: Boolean
         ): User {
+            /*
+            Realizamos la construcción paso a paso, según lo que nos interese
+            como se puede observar, hemos abstraído de la creación a las conexiones del frontend
+            ellos solo necesitan darnos los datos y el rol, y un mediador superior se encargará de analizarlo
+            y decidir qué construye, sin preocuparse del cómo; teniendo un código desacoplado
+             */
             val professor = User.Builder()
                 .username(username)
                 .password(password)
@@ -30,14 +39,12 @@ class UserBuilder {
                 .isAssociated(isAssociated)
                 .build()
 
-
             return professor
 
-            // en teoría este sería el objeto que le entregaríamos al DAO para hacer el insert (?)
-            // professorDAO.insert(preofessor)
+
         }
 
-        fun constructStudent(
+        fun buildStudent(
             username: String,
             password: String,
             type: Int,
@@ -46,6 +53,7 @@ class UserBuilder {
             email: String,
             isDeputy: Boolean
         ): User {
+            // devolveremos un objeto usuario
             val student = User.Builder()
                 .username(username)
                 .password(password)
@@ -58,7 +66,7 @@ class UserBuilder {
             return student
         }
 
-        fun constructAdmin(
+        fun buildAdmin(
             username: String,
             password: String,
             type: Int

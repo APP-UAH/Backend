@@ -1,6 +1,12 @@
 package com.appuah.Builder
 
 class User private constructor(
+    /*
+    Declaramos las variables de uno de nuestros usuarios:
+    - Profesor
+    - Estudiante
+    - Admin
+     */
     var username: String?,
     val password: String?,
     val type: Int?,
@@ -11,6 +17,11 @@ class User private constructor(
     val isAssociated: Boolean?,
     val isDeputy: Boolean?
 ) {
+    /*
+    Kotlin nos permite incorporar dentro de la clase el constructor (builder)
+    Las data class ahorra líneas de código porque solo contiene estado y
+    no realizan operaciones fuera de los getters/setters
+     */
     data class Builder(
         var username: String? = null,
         var password: String? = null,
@@ -23,6 +34,10 @@ class User private constructor(
         var isDeputy: Boolean? = null
     ) {
 
+        /*
+        apply es fundamental para el patrón builder para modificar las propiedades
+        de un objeto, apply recibe un objeto y devuelve el objeto cambiado
+         */
         fun username(username: String) = apply { this.username = username }
 
         fun password(password: String) = apply { this.password = password }
@@ -41,14 +56,15 @@ class User private constructor(
 
         fun isDeputy(isDeputy: Boolean) = apply { this.isDeputy = isDeputy }
 
+        // construimos el objeto
         fun build() = User(username, password, type, name, surname, email, office, isAssociated, isDeputy)
-
-
-
 
 
     }
 
-    
+    // solo para comprobar
+    override fun toString(): String {
+        return "User(username=$username, password=$password, type=$type, name=$name, surname=$surname, email=$email, office=$office, isAssociated=$isAssociated, isDeputy=$isDeputy)"
+    }
 
 }
