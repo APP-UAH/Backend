@@ -51,9 +51,9 @@ class CreationMediator : CreationMediatorInterface {
             isAssociated: Boolean
     ): User {
         return when (type) {
-            1 -> UserBuilder.buildStudent(username, password, type, name, surname, email, isDeputy)
-            2 -> UserBuilder.buildProfessor(username, password, type, name, surname, phone_number,email, office, isAssociated)
-            3 -> UserBuilder.buildAdmin(username, password, type)
+            0 -> UserBuilder.buildStudent(username, password, type, name, surname, email, isDeputy)
+            1 -> UserBuilder.buildProfessor(username, password, type, name, surname, phone_number,email, office, isAssociated)
+            2 -> UserBuilder.buildAdmin(username, password, type)
             else -> throw Exception("Invalid document type")
         }
     }

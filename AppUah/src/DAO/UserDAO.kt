@@ -22,7 +22,7 @@ class UserDAO {
             Professor.insert {
                 it[Professor.username] = "SalvadorUsername"
                 it[Professor.password] = "Contrasenna de salvador"
-                it[Professor.type] = 2
+                it[Professor.type] = 1
                 it[Professor.name] = "Salvador"
                 it[Professor.surname] = "Oton Tortosa"
                 it[Professor.phone_number] = "918856679"
@@ -83,7 +83,7 @@ class UserDAO {
             Student.insert {
                 it[Student.username] = "AlvaroUsername"
                 it[Student.password] = "Contrasenna de alvaro"
-                it[Student.type] = 1
+                it[Student.type] = 0
                 it[Student.name] = "Alvaro"
                 it[Student.surname] = "Golbano Duran"
                 it[Student.email] = "alvaro.golbano@edu.uah.es"
@@ -141,7 +141,7 @@ class UserDAO {
             Admin.insert {
                 it[Admin.username] = "Admin"
                 it[Admin.password] = "root"
-                it[Admin.type] = 3
+                it[Admin.type] = 2
             }
         }
     }
