@@ -53,20 +53,16 @@ class BehavioralMediator : BehavioralMediatorInterface {
         resDAO.addReservation(reserva, condition)
     }
 
-    fun getReservationFromDB(id : Int): ReservationInterface? {
-        return resDAO.getReservation(id)
+    fun getReservationFromDB(id: String, username: String): List<ReservationInterface?> {
+        return resDAO.getReservation(id, username)
     }
 
     fun getAllReservationsFromDB(): List<ReservationInterface?> {
         return resDAO.getAllReservation()
     }
 
-    fun updateReservationInDB(id : Int, state : Boolean?) {
-        resDAO.updateReservation(id, state)
-    }
-
-    fun deleteReservationFromDB() {
-        resDAO.deleteReservation()
+    fun deleteReservationFromDB(id: String) {
+        resDAO.deleteReservation(id)
     }
 
     fun addUser(condition : String){

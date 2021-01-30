@@ -5,6 +5,7 @@ import Mediator.BehavioralMediator
 import Mediator.CreationMediator
 import ReservationEntities.ReservationInterface
 import Tables.Reservation
+import com.appuah.Tables.userreservation
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -32,10 +33,15 @@ class ReservationDAO {
         }
     }
 
-    fun getReservation(id : String): ReservationInterface? {
+    fun getReservation(id : String, username: String): ReservationInterface? {
         return transaction {
-            Reservation.select { Reservation.id.eq(id) }.map { rowToReservation(it) }.singleOrNull()
+            Reservation.select() {Reservation.id.eq(id)}.map { rowToReservation(it) }.singleOrNull()
         }
+    }
+
+    fun getReservationByUsername(username : String): List<ReservationInterface?> {
+        return Join(Reservation, userreservation, onColumn = Reservation.id, otherColumn = userreservation.id_reservation, joinType = JoinType.LEFT,
+            additionalConstraint = {userreservation.username_users.eq(username)}).selectAll().map { rowToReservation(it)}
     }
 
     fun getAllReservation(): List<ReservationInterface?> {
@@ -74,7 +80,7 @@ class ReservationDAO {
         var room_name = get[Reservation.room]
         var type = get[Reservation.type]
 
-        return mediatorCreation.createReserva(type, id, state, begin.toString(), end.toString(), mediatorBehaviour.getRoom(room_name)!!)
+        return mediatorCreation.createReserva(type, id, state, begin, end, mediatorBehaviour.getRoom(room_name)!!)
     }
 
 }

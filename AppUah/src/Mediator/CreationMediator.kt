@@ -8,6 +8,8 @@ import ReservationFactoryMethod.ReservationFactory
 import RoomEntities.RoomInterface
 import RoomFactoryMethod.RoomFactory
 import RoomFactoryMethod.RoomType
+import jdk.vm.ci.meta.Local
+import java.time.LocalDateTime
 
 class CreationMediator : CreationMediatorInterface {
 
@@ -18,7 +20,7 @@ class CreationMediator : CreationMediatorInterface {
     private val FactoryClass = RoomFactory.getFactory(RoomType.CLASSROOM)
     val adapter = Adapter()
 
-    override fun createReserva(condition: String, id: String, state: Boolean?, begin: String, end: String, room: RoomInterface): ReservationInterface {
+    override fun createReserva(condition: String, id: String, state: Boolean?, begin: LocalDateTime, end: LocalDateTime, room: RoomInterface): ReservationInterface {
         return when (condition.toLowerCase()) {
             "library" -> factoryLibrary!!.createReservation(id, adapter.adaptBooleanToState(state), begin, end, room)
             "events" -> factoryEvents!!.createReservation(id, adapter.adaptBooleanToState(state), begin, end, room)
