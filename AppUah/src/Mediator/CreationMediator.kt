@@ -18,12 +18,11 @@ class CreationMediator : CreationMediatorInterface {
     private val FactoryClass = RoomFactory.getFactory(RoomType.CLASSROOM)
     val adapter = Adapter()
 
-    override fun createReserva(condition: String, id: Int, state: Boolean?, begin: String, end: String, room: RoomInterface): ReservationInterface {
-        // autogenerar uuid para el id
+    override fun createReserva(condition: String, id: String, state: Boolean?, begin: String, end: String, room: RoomInterface): ReservationInterface {
         return when (condition.toLowerCase()) {
-            "library" -> factoryLibrary!!.createReservation(1, adapter.adaptBooleanToState(state), begin, end, room)
-            "events" -> factoryEvents!!.createReservation(1, adapter.adaptBooleanToState(state), begin, end, room)
-            "subject" -> factorySubject!!.createReservation(1, adapter.adaptBooleanToState(state), begin, end, room)
+            "library" -> factoryLibrary!!.createReservation(id, adapter.adaptBooleanToState(state), begin, end, room)
+            "events" -> factoryEvents!!.createReservation(id, adapter.adaptBooleanToState(state), begin, end, room)
+            "subject" -> factorySubject!!.createReservation(id, adapter.adaptBooleanToState(state), begin, end, room)
             else -> throw Exception("Invalid document type")
         }
     }

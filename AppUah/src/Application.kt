@@ -1,5 +1,7 @@
 package com.appuah
 
+import Mediator.BehavioralMediator
+import Mediator.CreationMediator
 import com.appuah.Routes.reservation
 import io.ktor.application.*
 import io.ktor.response.*
@@ -34,12 +36,15 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    val mediatorBehavior = BehavioralMediator()
+    val mediatorCreation = CreationMediator()
+
     routing {
         get("/") {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
-        reservation()
+        reservation(mediatorBehavior, mediatorCreation)
 
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))

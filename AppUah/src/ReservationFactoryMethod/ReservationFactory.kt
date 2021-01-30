@@ -17,5 +17,5 @@ abstract class ReservationFactory {
         }
     }
 
-    abstract fun createReservation(id: Int, state: ReservationState, begin: String, end: String, room: RoomInterface): ReservationInterface
+    abstract fun createReservation(id: String, state: ReservationState, begin: String, end: String, room: RoomInterface): ReservationInterface
 }

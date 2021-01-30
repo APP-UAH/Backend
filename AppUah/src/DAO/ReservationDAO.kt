@@ -24,15 +24,15 @@ class ReservationDAO {
         transaction {
             Reservation.insert {
                 it[state] = adapter.adaptStateToBoolean(reserva.state)
-                it[begin] = LocalDateTime.now()
-                it[end] = LocalDateTime.now().plusDays(2)
+                it[begin] = reserva.begin
+                it[end] = reserva.end
                 it[room] = reserva.room.name
                 it[type] = condition
             }
         }
     }
 
-    fun getReservation(id : Int): ReservationInterface? {
+    fun getReservation(id : String): ReservationInterface? {
         return transaction {
             Reservation.select { Reservation.id.eq(id) }.map { rowToReservation(it) }.singleOrNull()
         }
@@ -44,21 +44,21 @@ class ReservationDAO {
         }
     }
 
-    fun updateReservation(id : Int, stateUpdated : Boolean?) {
+    fun updateReservation(newReserva : ReservationInterface, condition: String) {
         transaction {
-            Reservation.update({ Reservation.id.eq(id) }) {
-                it[state] = stateUpdated
-                it[begin] = LocalDateTime.now()
-                it[end] = LocalDateTime.now().plusDays(2)
-                it[room] = "NA8"
-                it[type] = "subject"
+            Reservation.update({ Reservation.id.eq(newReserva.id) }) {
+                it[state] = adapter.adaptStateToBoolean(newReserva.state)
+                it[begin] = newReserva.begin
+                it[end] = newReserva.end
+                it[room] = newReserva.room.name
+                it[type] = condition
             }
         }
     }
 
-    fun deleteReservation() {
+    fun deleteReservation(id: String) {
         transaction {
-            Reservation.deleteWhere { Reservation.id.eq(5) }
+            Reservation.deleteWhere { Reservation.id.eq(id) }
         }
     }
 

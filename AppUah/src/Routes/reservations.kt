@@ -1,5 +1,7 @@
 package com.appuah.Routes
 
+import Mediator.BehavioralMediator
+import Mediator.CreationMediator
 import com.appuah.API
 import io.ktor.application.call
 import io.ktor.http.ContentType
@@ -8,6 +10,7 @@ import io.ktor.locations.*
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.Route
+import java.util.*
 
 const val reservation = "$API/reservations"
 
@@ -16,8 +19,14 @@ const val reservation = "$API/reservations"
 class ReservationsRoute
 
 @KtorExperimentalLocationsAPI
-fun Route.reservation(){
+fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: CreationMediator){
     get<ReservationsRoute>{
         call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
+    }
+
+    post<ReservationsRoute>{
+
+        val newUUID = UUID.randomUUID()
+        mediatorCreation.createReserva(, newUUID.toString(),)
     }
 }

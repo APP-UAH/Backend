@@ -6,7 +6,7 @@ import State.ReservationState
 
 class ReservationFactoryLibrary : ReservationFactory() {
 
-    override fun createReservation(id: Int, state: ReservationState, begin: String, end: String, room: RoomInterface): ReservationLibrary {
+    override fun createReservation(id: String, state: ReservationState, begin: String, end: String, room: RoomInterface): ReservationLibrary {
         return ReservationLibrary(id, state, begin, end, room)
     }
 }

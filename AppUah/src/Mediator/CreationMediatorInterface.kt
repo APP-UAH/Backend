@@ -6,7 +6,7 @@ import RoomEntities.RoomInterface
 
 interface CreationMediatorInterface {
 
-    fun createReserva(condition : String, id : Int, state : Boolean?, begin : String, end : String, room: RoomInterface) : ReservationInterface;
+    fun createReserva(condition : String, id : String, state : Boolean?, begin : String, end : String, room: RoomInterface) : ReservationInterface;
 
     fun createRoom(condition : String, name : String, capacity : Int) : RoomInterface;
 
