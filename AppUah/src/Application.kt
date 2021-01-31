@@ -1,6 +1,9 @@
 package com.appuah
 
-import com.appuah.Routes.reservation
+import Mediator.BehavioralMediator
+import Mediator.CreationMediator
+import Singleton.DatabaseSingleton
+import Routes.login
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -33,19 +36,20 @@ fun Application.module(testing: Boolean = false) {
         gson {
         }
     }
-
+    DatabaseSingleton.init()
+    val mediatorBehavior = BehavioralMediator()
+    val mediatorCreation = CreationMediator()
     routing {
         get("/") {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
-        reservation()
-
+        login(mediatorBehavior)
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))
         }
     }
 }
 
-const val API = "AppUah"
+const val API = "/AppUah"
 

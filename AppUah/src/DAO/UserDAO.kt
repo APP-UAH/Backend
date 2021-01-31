@@ -1,11 +1,12 @@
 package DAO
 
-import Builder.User
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
 import Tables.Professor
 import Tables.Student
 import Tables.Admin
+import Tables.Users
+import Builder.User
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -17,12 +18,40 @@ class UserDAO {
         this.mediatorBehaviour = mediator
     }
 
+    fun getUser(username: String): User? {
+        return transaction {
+            Users.select { Users.username.eq(username) }.map { rowToUser(it) }.singleOrNull()
+        }
+    }
+
+    private fun rowToUser(get: ResultRow?): User? {
+        if (get == null) {
+            return null
+        }
+        var username = get[Users.username]
+        var password = get[Users.password]
+        var type = get[Users.type]
+        return mediatorCreation.buildUser(
+            username,
+            password,
+            type,
+            "name",
+            "surname",
+            "phone_number",
+            "email",
+            "office",
+            true,
+            true
+        )
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------
     fun addProfessor() {
         transaction {
             Professor.insert {
                 it[Professor.username] = "SalvadorUsername"
                 it[Professor.password] = "Contrasenna de salvador"
-                it[Professor.type] = 2
+                it[Professor.type] = 1
                 it[Professor.name] = "Salvador"
                 it[Professor.surname] = "Oton Tortosa"
                 it[Professor.phone_number] = "918856679"
@@ -74,7 +103,18 @@ class UserDAO {
         var email = get[Professor.email]
         var office = get[Professor.office]
         var isAsociated = get[Professor.is_associated]
-        return mediatorCreation.buildUser(username, password, type, name, surname, phone_number, email, office, true, isAsociated)
+        return mediatorCreation.buildUser(
+            username,
+            password,
+            type,
+            name,
+            surname,
+            phone_number,
+            email,
+            office,
+            true,
+            isAsociated
+        )
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------
@@ -83,7 +123,7 @@ class UserDAO {
             Student.insert {
                 it[Student.username] = "AlvaroUsername"
                 it[Student.password] = "Contrasenna de alvaro"
-                it[Student.type] = 1
+                it[Student.type] = 0
                 it[Student.name] = "Alvaro"
                 it[Student.surname] = "Golbano Duran"
                 it[Student.email] = "alvaro.golbano@edu.uah.es"
@@ -132,7 +172,18 @@ class UserDAO {
         var surname = get[Student.surname]
         var email = get[Student.email]
         var isDeputy = get[Student.is_deputy]
-        return mediatorCreation.buildUser(username, password, type, name, surname, "phone_number", email, "office", isDeputy, true)
+        return mediatorCreation.buildUser(
+            username,
+            password,
+            type,
+            name,
+            surname,
+            "phone_number",
+            email,
+            "office",
+            isDeputy,
+            true
+        )
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------
@@ -141,7 +192,7 @@ class UserDAO {
             Admin.insert {
                 it[Admin.username] = "Admin"
                 it[Admin.password] = "root"
-                it[Admin.type] = 3
+                it[Admin.type] = 2
             }
         }
     }
@@ -180,7 +231,18 @@ class UserDAO {
         var username = get[Admin.username]
         var password = get[Admin.password]
         var type = get[Admin.type]
-        return mediatorCreation.buildUser(username, password, type, "name", "surname", "phone_number", "email", "office", true, true)
+        return mediatorCreation.buildUser(
+            username,
+            password,
+            type,
+            "name",
+            "surname",
+            "phone_number",
+            "email",
+            "office",
+            true,
+            true
+        )
     }
 
 }
