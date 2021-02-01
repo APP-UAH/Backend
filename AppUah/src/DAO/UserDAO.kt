@@ -46,25 +46,25 @@ class UserDAO {
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------
-    fun addProfessor() {
+    fun addProfessor(username:String,password:String,type:Int,name:String,surname:String,phone_number:String,email:String,office:String,is_associated:Boolean) {
         transaction {
             Professor.insert {
-                it[Professor.username] = "SalvadorUsername"
-                it[Professor.password] = "Contrasenna de salvador"
-                it[Professor.type] = 1
-                it[Professor.name] = "Salvador"
-                it[Professor.surname] = "Oton Tortosa"
-                it[Professor.phone_number] = "918856679"
-                it[Professor.email] = "salvador.oton@uah.es"
-                it[Professor.office] = "N312"
-                it[Professor.is_associated] = false
+                it[Professor.username] = username
+                it[Professor.password] = password
+                it[Professor.type] = type
+                it[Professor.name] = name
+                it[Professor.surname] = surname
+                it[Professor.phone_number] = phone_number
+                it[Professor.email] = email
+                it[Professor.office] = office
+                it[Professor.is_associated] = is_associated
             }
         }
     }
 
-    fun getProfessor(): User? {
+    fun getProfessor(username:String): User? {
         return transaction {
-            Professor.select { Professor.username.eq("SalvadorUsername") }.map { rowToProfessor(it) }.singleOrNull()
+            Professor.select { Professor.username.eq(username) }.map { rowToProfessor(it) }.singleOrNull()
         }
     }
 
@@ -118,24 +118,23 @@ class UserDAO {
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------
-    fun addStudent() {
+    fun addStudent(username:String,password:String,type:Int,name:String,surname:String,email:String,is_deputy:Boolean) {
         transaction {
             Student.insert {
-                it[Student.username] = "AlvaroUsername"
-                it[Student.password] = "Contrasenna de alvaro"
-                it[Student.type] = 0
-                it[Student.name] = "Alvaro"
-                it[Student.surname] = "Golbano Duran"
-                it[Student.email] = "alvaro.golbano@edu.uah.es"
-                it[Student.is_deputy] = true
-
+                it[Student.username] = username
+                it[Student.password] = password
+                it[Student.type] = type
+                it[Student.name] = name
+                it[Student.surname] = surname
+                it[Student.email] = email
+                it[Student.is_deputy] = is_deputy
             }
         }
     }
 
-    fun getStudent(): User? {
+    fun getStudent(username:String): User? {
         return transaction {
-            Student.select { Student.username.eq("AlvaroUsername") }.map { rowToStudent(it) }.singleOrNull()
+            Student.select { Student.username.eq(username) }.map { rowToStudent(it) }.singleOrNull()
         }
     }
 
@@ -155,9 +154,9 @@ class UserDAO {
         }
     }
 
-    fun deleteStudent() {
+    fun deleteStudent(username:String) {
         transaction {
-            Student.deleteWhere { Student.username.eq("AlvaroUsername") }
+            Student.deleteWhere { Student.username.eq(username) }
         }
     }
 
@@ -187,19 +186,19 @@ class UserDAO {
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------
-    fun addAdmin() {
+    fun addAdmin(username:String,password:String,type:Int) {
         transaction {
             Admin.insert {
-                it[Admin.username] = "Admin"
-                it[Admin.password] = "root"
-                it[Admin.type] = 2
+                it[Admin.username] = username
+                it[Admin.password] = password
+                it[Admin.type] = type
             }
         }
     }
 
-    fun getAdmin(): User? {
+    fun getAdmin(username:String): User? {
         return transaction {
-            Admin.select { Admin.username.eq("Admin") }.map { rowToAdmin(it) }.singleOrNull()
+            Admin.select { Admin.username.eq(username) }.map { rowToAdmin(it) }.singleOrNull()
         }
     }
 
@@ -218,9 +217,9 @@ class UserDAO {
         }
     }
 
-    fun deleteAdmin() {
+    fun deleteAdmin(username: String) {
         transaction {
-            Admin.deleteWhere { Admin.username.eq("Admin") }
+            Admin.deleteWhere { Admin.username.eq(username) }
         }
     }
 

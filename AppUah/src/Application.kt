@@ -2,6 +2,7 @@ package com.appuah
 
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
+import Routes.User
 import Singleton.DatabaseSingleton
 import Routes.login
 import io.ktor.application.*
@@ -45,6 +46,7 @@ fun Application.module(testing: Boolean = false) {
         }
 
         login(mediatorBehavior)
+        User(mediatorBehavior)
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))
         }

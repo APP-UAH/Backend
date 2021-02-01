@@ -21,17 +21,22 @@ class doLogin
 @KtorExperimentalLocationsAPI
 fun Route.login(mediatorBehaviour: BehavioralMediator) {
     post<doLogin>{
-        val loginRequest = call.receive<LoginRequest>()
-        val newLoginRequest = mediatorBehaviour.usDAO.getUser(loginRequest.username)
-        var gson = Gson()
-        if (newLoginRequest != null) {
-            if(!newLoginRequest.password.equals(loginRequest.password)){
-                var responseJSon = gson.toJson(LoginResponse(false, null))
-                call.respond(responseJSon)
-            }else {
-                var responseJSon = gson.toJson(LoginResponse(true, newLoginRequest.type))
-                call.respond(responseJSon)
+        try {
+            val loginRequest = call.receive<LoginRequest>()
+            val newLoginRequest = mediatorBehaviour.usDAO.getUser(loginRequest.username)
+            var gson = Gson()
+            if (newLoginRequest != null) {
+                if(!newLoginRequest.password.equals(loginRequest.password)){
+                    var responseJSon = gson.toJson(LoginResponse(false, null))
+                    call.respond(responseJSon)
+                }else {
+                    var responseJSon = gson.toJson(LoginResponse(true, newLoginRequest.type))
+                    call.respond(responseJSon)
+                }
             }
+        }catch (e: Exception){
+            call.respond(e)
         }
+
     }
 }
