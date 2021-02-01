@@ -2,6 +2,7 @@ package com.appuah
 
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
+import Singleton.DatabaseSingleton
 import com.appuah.Routes.reservation
 import io.ktor.application.*
 import io.ktor.response.*
@@ -36,6 +37,7 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    DatabaseSingleton.init()
     val mediatorBehavior = BehavioralMediator()
     val mediatorCreation = CreationMediator()
 
@@ -52,5 +54,5 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
-const val API = "AppUah"
+const val API = "/AppUah"
 

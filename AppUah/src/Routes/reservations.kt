@@ -4,6 +4,7 @@ import Mediator.BehavioralMediator
 import Mediator.CreationMediator
 import com.appuah.API
 import com.appuah.Models.ReservationRequest
+import com.google.gson.Gson
 import io.ktor.application.call
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -17,6 +18,7 @@ import java.util.*
 
 const val reservation = "$API/reservations"
 const val createReservation = "$reservation/create"
+const val reservationUser = "$reservation/user"
 
 @KtorExperimentalLocationsAPI
 @Location(reservation)
@@ -27,27 +29,46 @@ class ReservationsRoute
 class CreateReservationRoute
 
 @KtorExperimentalLocationsAPI
+@Location(reservationUser)
+class GetReservationByUsername
+
+@KtorExperimentalLocationsAPI
 fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: CreationMediator){
     get<ReservationsRoute>{
-        val reservaRequest = call.receive<ReservationRequest>()
-        mediatorBehaviour.getReservationFromDB(reservaRequest.id, reservaRequest.username)
+        val reservas = mediatorBehaviour.getAllReservationsFromDB()
+        val jsonString = Gson().toJson(reservas)
+        call.respond(HttpStatusCode.Accepted,jsonString)
+    }
 
+    get<GetReservationByUsername>{
+        val reservaRequest = call.receive<ReservationRequest>()
+        val id = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
+        val jsonString = Gson().toJson(id)
+        call.respond(HttpStatusCode.Accepted,jsonString)
     }
 
     post<CreateReservationRoute>{
         val reservaRequest = call.receive<ReservationRequest>()
-        val newUUID = UUID.randomUUID()
+        val newUUID = UUID.randomUUID().toString()
         try {
             val reserva = mediatorCreation.createReserva(
                 reservaRequest.type,
-                newUUID.toString(),
+                newUUID,
                 null,
                 reservaRequest.begin,
                 reservaRequest.end,
                 mediatorBehaviour.getRoom(reservaRequest.room_name)!!
             )
+            mediatorBehaviour.addReservationToDB(reserva, reservaRequest.type, reservaRequest.username)
+            mediatorBehaviour.addUserReservationToDB(newUUID, reservaRequest.username)
+            if (!reservaRequest.type.toLowerCase().equals("library")){
+                mediatorBehaviour.addEventReservationToDB(newUUID)
+                if (!reservaRequest.type.toLowerCase().equals("events")){
+                    val event_id = mediatorBehaviour.getEventIdFromReservationId(newUUID)
+                    mediatorBehaviour.addEventsSubjectToDB(event_id!!, reservaRequest.id_Subject, reservaRequest.plan_Subject)
+                }
+            }
 
-            mediatorBehaviour.addReservationToDB(reserva, reservaRequest.type)
             call.respond("La reserva se ha creado correctamente")
         } catch (e: Exception){
             call.respond(e)

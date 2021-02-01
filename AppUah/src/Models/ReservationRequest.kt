@@ -9,5 +9,6 @@ data class ReservationRequest(
     val end: LocalDateTime,
     val username: String,
     val type: String,
-    val id_subject: String) {
+    val id_Subject: String,
+    val plan_Subject: String) {
 }

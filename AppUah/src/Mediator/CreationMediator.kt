@@ -8,7 +8,6 @@ import ReservationFactoryMethod.ReservationFactory
 import RoomEntities.RoomInterface
 import RoomFactoryMethod.RoomFactory
 import RoomFactoryMethod.RoomType
-import jdk.vm.ci.meta.Local
 import java.time.LocalDateTime
 
 class CreationMediator : CreationMediatorInterface {

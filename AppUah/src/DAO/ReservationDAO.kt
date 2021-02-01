@@ -21,7 +21,7 @@ class ReservationDAO {
         this.mediatorBehaviour = mediator
     }
 
-    fun addReservation(reserva : ReservationInterface, condition : String) {
+    fun addReservation(reserva : ReservationInterface, condition : String, username: String) {
         transaction {
             Reservation.insert {
                 it[state] = adapter.adaptStateToBoolean(reserva.state)
@@ -40,14 +40,16 @@ class ReservationDAO {
     }
 
     fun getReservationByUsername(username : String): List<ReservationInterface?> {
-        return Join(Reservation, userreservation, onColumn = Reservation.id, otherColumn = userreservation.id_reservation, joinType = JoinType.LEFT,
-            additionalConstraint = {userreservation.username_users.eq(username)}).selectAll().map { rowToReservation(it)}
+        return Join(Reservation, userreservation, onColumn = Reservation.id, otherColumn = userreservation.id_Reservation, joinType = JoinType.LEFT,
+            additionalConstraint = {userreservation.username_Users.eq(username)}).selectAll().map { rowToReservation(it)}
     }
 
     fun getAllReservation(): List<ReservationInterface?> {
-        return transaction {
-            Reservation.selectAll().map { rowToReservation(it) }
+        var res = List<ReservationInterface?>()
+        transaction {
+            res = Reservation.selectAll().map { rowToReservation(it) }
         }
+        return res
     }
 
     fun updateReservation(newReserva : ReservationInterface, condition: String) {
@@ -73,14 +75,13 @@ class ReservationDAO {
             return null
         }
 
-        var id = get[Reservation.id]
-        var state = get[Reservation.state]
-        var begin = get[Reservation.begin]
-        var end = get[Reservation.end]
-        var room_name = get[Reservation.room]
-        var type = get[Reservation.type]
-
-        return mediatorCreation.createReserva(type, id, state, begin, end, mediatorBehaviour.getRoom(room_name)!!)
+        return mediatorCreation.createReserva(
+                get[Reservation.type],
+                get[Reservation.id],
+                get[Reservation.state],
+                get[Reservation.begin],
+                get[Reservation.end],
+                mediatorBehaviour.getRoom(get[Reservation.room])!!)
     }
 
 }

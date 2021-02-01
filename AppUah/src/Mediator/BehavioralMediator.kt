@@ -11,6 +11,9 @@ import RoomEntities.RoomInterface
 import State.StateAccepted
 import State.StateNotAccepted
 import State.StateNotProcessed
+import com.appuah.DAO.EventsReservationDAO
+import com.appuah.DAO.EventsSubjectsDAO
+import com.appuah.DAO.UserReservationDAO
 
 class BehavioralMediator : BehavioralMediatorInterface {
 
@@ -19,6 +22,9 @@ class BehavioralMediator : BehavioralMediatorInterface {
     val iteratorRooms = collectionRooms.createIterator()
     val resDAO = ReservationDAO(this)
     val usDAO = UserDAO(this)
+    val userResDAO = UserReservationDAO()
+    val eventsResDAO = EventsReservationDAO()
+    val eventsSubDAO = EventsSubjectsDAO()
 
     override fun changeState(condition: String, reserva: ReservationInterface) {
         when (condition.toLowerCase()) {
@@ -49,16 +55,36 @@ class BehavioralMediator : BehavioralMediatorInterface {
         return room
     }
 
-    fun addReservationToDB(reserva : ReservationInterface, condition : String) {
-        resDAO.addReservation(reserva, condition)
+    fun addReservationToDB(reserva : ReservationInterface, condition : String, username: String) {
+        resDAO.addReservation(reserva, condition, username)
     }
 
-    fun getReservationFromDB(id: String, username: String): List<ReservationInterface?> {
+    fun addUserReservationToDB(id: String, username: String){
+        userResDAO.addUserReservation(id, username)
+    }
+
+    fun addEventReservationToDB(id_res: String){
+        eventsResDAO.addEventReservation(id_res)
+    }
+
+    fun addEventsSubjectToDB(id_event: Int, code: String, plan: String){
+        eventsSubDAO.addEvenSubject(id_event, code, plan)
+    }
+
+    /*fun getReservationFromDB(id: String, username: String): List<ReservationInterface?> {
         return resDAO.getReservation(id, username)
+    }*/
+
+    fun getEventIdFromReservationId(id_res: String): Int?{
+        return eventsResDAO.getEvent(id_res)
     }
 
     fun getAllReservationsFromDB(): List<ReservationInterface?> {
         return resDAO.getAllReservation()
+    }
+
+    fun getReservationFromUsername(username: String): List<ReservationInterface?>{
+        return resDAO.getReservationByUsername(username)
     }
 
     fun deleteReservationFromDB(id: String) {
