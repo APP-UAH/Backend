@@ -14,25 +14,25 @@ import io.ktor.request.receive
 import io.ktor.response.*
 import io.ktor.routing.Route
 
-const val addUser = "$API/adduser"
+const val UserRoute = "$API/adduser"
 
 @KtorExperimentalLocationsAPI
-@Location(addUser)
-class doAddUser
+@Location(UserRoute)
+class doUser
 
 @KtorExperimentalLocationsAPI
-fun Route.addUser(mediator: BehavioralMediator){
-    post<doAddUser>{
+fun Route.User(mediator: BehavioralMediator){
+    post<doUser>{
         var gson = Gson()
         try {
             val userRequest = call.receive<UserRequest>()
             when(userRequest.type){
                 0-> mediator.usDAO.addStudent(userRequest.username,userRequest.password,userRequest.type,
-                    userRequest.name,userRequest.surname,userRequest.email,userRequest.is_deputy)
+                    userRequest.name,userRequest.surname,userRequest.email,userRequest.is_deputy!!)
 
                 1-> mediator.usDAO.addProfessor(userRequest.username,userRequest.password,userRequest.type,
-                    userRequest.name,userRequest.surname,userRequest.phone_number,userRequest.email,
-                    userRequest.office,userRequest.is_associated)
+                    userRequest.name,userRequest.surname,userRequest.phone_number!!,userRequest.email,
+                    userRequest.office!!,userRequest.is_associated!!)
 
                 2-> mediator.usDAO.addAdmin(userRequest.username,userRequest.password,userRequest.type)
             }
