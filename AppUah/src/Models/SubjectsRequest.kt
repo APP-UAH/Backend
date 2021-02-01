@@ -1,6 +1,6 @@
 package com.appuah.Models
 
-data class SubjectRequest(
+data class SubjectsRequest(
     val username: String,
     val type: String
 )

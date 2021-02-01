@@ -1,6 +1,8 @@
 package com.appuah
 
+import Singleton.DatabaseSingleton
 import com.appuah.Routes.reservation
+import com.appuah.Routes.subjects
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -33,6 +35,7 @@ fun Application.module(testing: Boolean = false) {
         gson {
         }
     }
+    DatabaseSingleton.init()
 
     routing {
         get("/") {
@@ -40,10 +43,13 @@ fun Application.module(testing: Boolean = false) {
         }
 
         reservation()
+        subjects()
 
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))
         }
+
+
     }
 }
 
