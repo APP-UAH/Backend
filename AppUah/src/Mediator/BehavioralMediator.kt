@@ -87,6 +87,10 @@ class BehavioralMediator : BehavioralMediatorInterface {
         return resDAO.getReservationByUsername(username)
     }
 
+    fun getPendingReservation(): List<ReservationInterface?>{
+        return resDAO.getPendingReservationFromDB()
+    }
+
     fun deleteReservationFromDB(id: String) {
         resDAO.deleteReservation(id)
     }

@@ -50,6 +50,12 @@ class ReservationDAO {
         }
     }
 
+    fun getPendingReservationFromDB(): List<ReservationInterface?> {
+        return  transaction {
+            Reservation.select { Reservation.is_booked.isNull()}.map { rowToReservation(it) }
+        }
+    }
+
     fun updateReservation(newReserva : ReservationInterface, condition: String) {
         transaction {
             Reservation.update({ Reservation.id.eq(newReserva.id) }) {

@@ -19,6 +19,7 @@ import java.util.*
 const val reservation = "$API/reservations"
 const val createReservation = "$reservation/create"
 const val reservationUser = "$reservation/user"
+const val reservationPending = "$reservation/pending"
 
 @KtorExperimentalLocationsAPI
 @Location(reservation)
@@ -33,6 +34,10 @@ class CreateReservationRoute
 class GetReservationByUsername
 
 @KtorExperimentalLocationsAPI
+@Location(reservationPending)
+class GetPendingReservation
+
+@KtorExperimentalLocationsAPI
 fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: CreationMediator){
     get<ReservationsRoute>{
         val reservas = mediatorBehaviour.getAllReservationsFromDB()
@@ -43,6 +48,12 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
     get<GetReservationByUsername>{
         val reservaRequest = call.receive<ReservationRequest>()
         val reservas = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
+        val jsonString = Gson().toJson(reservas)
+        call.respond(HttpStatusCode.Accepted,jsonString)
+    }
+
+    get<GetPendingReservation>{
+        val reservas = mediatorBehaviour.getPendingReservation()
         val jsonString = Gson().toJson(reservas)
         call.respond(HttpStatusCode.Accepted,jsonString)
     }
