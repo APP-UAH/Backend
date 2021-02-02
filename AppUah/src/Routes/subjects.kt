@@ -1,4 +1,4 @@
-package com.appuah.Routes
+package Routes
 
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
