@@ -23,6 +23,7 @@ const val createReservation = "$reservation/create"
 const val reservationUser = "$reservation/user"
 const val reservationPending = "$reservation/pending"
 const val reservationUpdate = "$reservation/update"
+const val reservationDelete = "$reservation/delete"
 
 @KtorExperimentalLocationsAPI
 @Location(reservation)
@@ -43,6 +44,10 @@ class GetPendingReservation
 @KtorExperimentalLocationsAPI
 @Location(reservationUpdate)
 class UpdateReservation
+
+@KtorExperimentalLocationsAPI
+@Location(reservationDelete)
+class DeleteReservation
 
 @KtorExperimentalLocationsAPI
 fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: CreationMediator){
@@ -116,5 +121,10 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
         }
     }
 
+    delete<DeleteReservation>{
+        val reservaRequest = call.receive<ReservationRequest>()
+        mediatorBehaviour.deleteReservationFromDB(reservaRequest.id)
+        call.respond(HttpStatusCode.Accepted, "Reserva borrada")
+    }
 
 }
