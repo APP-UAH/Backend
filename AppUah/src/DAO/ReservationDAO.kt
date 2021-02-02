@@ -33,7 +33,7 @@ class ReservationDAO {
         }
     }
 
-    fun getReservation(id : String, username: String): ReservationInterface? {
+    fun getReservation(id : String): ReservationInterface? {
         return transaction {
             Reservation.select() {Reservation.id.eq(id)}.map { rowToReservation(it) }.singleOrNull()
         }
@@ -56,7 +56,7 @@ class ReservationDAO {
         }
     }
 
-    fun updateReservation(newReserva : ReservationInterface, condition: String) {
+    fun update(newReserva : ReservationInterface, condition: String) {
         transaction {
             Reservation.update({ Reservation.id.eq(newReserva.id) }) {
                 it[is_booked] = adapter.adaptStateToBoolean(newReserva.state)

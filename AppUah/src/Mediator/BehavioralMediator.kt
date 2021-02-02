@@ -83,6 +83,10 @@ class BehavioralMediator : BehavioralMediatorInterface {
         return resDAO.getAllReservation()
     }
 
+    fun getReservationFromId(id: String): ReservationInterface?{
+        return resDAO.getReservation(id)
+    }
+
     fun getReservationFromUsername(username: String): List<ReservationInterface?>{
         return resDAO.getReservationByUsername(username)
     }
@@ -114,6 +118,10 @@ class BehavioralMediator : BehavioralMediatorInterface {
 
     fun getAllRooms() : ArrayList<RoomInterface>{
         return collectionRooms.rooms
+    }
+
+    fun updateReservation(reserva : ReservationInterface, condition: String){
+        return resDAO.update(reserva, condition)
     }
 
 }

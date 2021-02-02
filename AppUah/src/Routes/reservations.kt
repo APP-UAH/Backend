@@ -13,13 +13,16 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.Route
+import io.ktor.routing.patch
 import java.lang.Exception
 import java.util.*
+import kotlin.Exception
 
 const val reservation = "$API/reservations"
 const val createReservation = "$reservation/create"
 const val reservationUser = "$reservation/user"
 const val reservationPending = "$reservation/pending"
+const val reservationUpdate = "$reservation/update"
 
 @KtorExperimentalLocationsAPI
 @Location(reservation)
@@ -36,6 +39,10 @@ class GetReservationByUsername
 @KtorExperimentalLocationsAPI
 @Location(reservationPending)
 class GetPendingReservation
+
+@KtorExperimentalLocationsAPI
+@Location(reservationUpdate)
+class UpdateReservation
 
 @KtorExperimentalLocationsAPI
 fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: CreationMediator){
@@ -79,10 +86,35 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
                     mediatorBehaviour.addEventsSubjectToDB(event_id!!, reservaRequest.id_Subject, reservaRequest.plan_Subject)
                 }
             }
-
-            call.respond("La reserva se ha creado correctamente")
+            call.respond(HttpStatusCode.Created ,"La reserva se ha creado correctamente")
         } catch (e: Exception){
-            call.respond(e)
+            call.respond(HttpStatusCode.InternalServerError, e)
         }
     }
+
+    patch<UpdateReservation>{
+        val reservaRequest = call.receive<ReservationRequest>()
+        try {
+            val newReserva = mediatorCreation.createReserva(
+                    reservaRequest.type,
+                    reservaRequest.id,
+                    reservaRequest.state,
+                    reservaRequest.begin,
+                    reservaRequest.end,
+                    mediatorBehaviour.getRoom(reservaRequest.room_name)!!
+            )
+            var reserva = mediatorBehaviour.getReservationFromId(reservaRequest.id)
+            if (reserva?.id.isNullOrEmpty()){
+                call.respond(HttpStatusCode.BadRequest, "La reserva no existe")
+            } else {
+                mediatorBehaviour.updateReservation(newReserva, reservaRequest.type)
+                call.respond(HttpStatusCode.Accepted, "La reserva ha sido actualizada")
+            }
+
+        } catch (e: Exception){
+            call.respond(HttpStatusCode.InternalServerError, e)
+        }
+    }
+
+
 }
