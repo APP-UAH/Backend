@@ -29,7 +29,7 @@ class User private constructor(
 
         fun password(password: String) = apply { this.password = password }
 
-        fun type(type: Int) = apply { this.type = type }
+        fun type(type: Int) = apply { this.type = type } //0 student, 1 professor, 2 admin
 
         fun name(name: String) = apply { this.name = name }
 

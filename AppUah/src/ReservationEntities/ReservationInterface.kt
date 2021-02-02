@@ -2,11 +2,12 @@ package ReservationEntities
 
 import RoomEntities.RoomInterface
 import State.ReservationState
+import java.time.LocalDateTime
 
 interface ReservationInterface {
-    var id: Int
+    var id: String
     var state : ReservationState
-    var begin: String
-    var end: String
+    var begin: LocalDateTime
+    var end: LocalDateTime
     var room: RoomInterface
 }

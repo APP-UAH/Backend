@@ -3,6 +3,7 @@ package ReservationFactoryMethod
 import ReservationEntities.ReservationInterface
 import RoomEntities.RoomInterface
 import State.ReservationState
+import java.time.LocalDateTime
 
 abstract class ReservationFactory {
 
@@ -17,5 +18,5 @@ abstract class ReservationFactory {
         }
     }
 
-    abstract fun createReservation(id: Int, state: ReservationState, begin: String, end: String, room: RoomInterface): ReservationInterface
+    abstract fun createReservation(id: String, state: ReservationState, begin: LocalDateTime, end: LocalDateTime, room: RoomInterface): ReservationInterface
 }

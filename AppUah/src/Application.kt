@@ -2,9 +2,8 @@ package com.appuah
 
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
-import Routes.User
+import Routes.*
 import Singleton.DatabaseSingleton
-import Routes.login
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -37,16 +36,23 @@ fun Application.module(testing: Boolean = false) {
         gson {
         }
     }
+
     DatabaseSingleton.init()
     val mediatorBehavior = BehavioralMediator()
     val mediatorCreation = CreationMediator()
+    init(mediatorCreation, mediatorBehavior)
+
     routing {
         get("/") {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
+        reservation(mediatorBehavior, mediatorCreation)
+      
         login(mediatorBehavior)
+      
         User(mediatorBehavior)
+
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))
         }
@@ -55,3 +61,13 @@ fun Application.module(testing: Boolean = false) {
 
 const val API = "/AppUah"
 
+fun init(mediatorCreation : CreationMediator, mediatorBehavioral : BehavioralMediator){
+    var clase = mediatorCreation.createRoom("Subject", "NA8", 124)
+    mediatorBehavioral.addRoom(clase)
+    clase = mediatorCreation.createRoom("Subject", "SA8", 75)
+    mediatorBehavioral.addRoom(clase)
+    clase = mediatorCreation.createRoom("Library", "pequenia",2)
+    mediatorBehavioral.addRoom(clase)
+    clase = mediatorCreation.createRoom("Library", "Grande",6)
+    mediatorBehavioral.addRoom(clase)
+}
