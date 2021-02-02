@@ -31,9 +31,6 @@ class UserBuilder {
 
 
             return professor
-
-            // en teoría este sería el objeto que le entregaríamos al DAO para hacer el insert (?)
-            // professorDAO.insert(preofessor)
         }
 
         fun buildStudent(

@@ -1,11 +1,12 @@
 package DAO
 
-import Builder.User
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
 import Tables.Professor
 import Tables.Student
 import Tables.Admin
+import Tables.Users
+import Builder.User
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -17,25 +18,53 @@ class UserDAO {
         this.mediatorBehaviour = mediator
     }
 
-    fun addProfessor() {
+    fun getUser(username: String): User? {
+        return transaction {
+            Users.select { Users.username.eq(username) }.map { rowToUser(it) }.singleOrNull()
+        }
+    }
+
+    private fun rowToUser(get: ResultRow?): User? {
+        if (get == null) {
+            return null
+        }
+        var username = get[Users.username]
+        var password = get[Users.password]
+        var type = get[Users.type]
+        return mediatorCreation.buildUser(
+            username,
+            password,
+            type,
+            "name",
+            "surname",
+            "phone_number",
+            "email",
+            "office",
+            true,
+            true
+        )
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------------------
+    fun addProfessor(username:String,password:String,type:Int,name:String,surname:String,phone_number:String,email:String,office:String,is_associated:Boolean) {
         transaction {
             Professor.insert {
-                it[Professor.username] = "SalvadorUsername"
-                it[Professor.password] = "Contrasenna de salvador"
-                it[Professor.type] = 2
-                it[Professor.name] = "Salvador"
-                it[Professor.surname] = "Oton Tortosa"
-                it[Professor.phone_number] = "918856679"
-                it[Professor.email] = "salvador.oton@uah.es"
-                it[Professor.office] = "N312"
-                it[Professor.is_associated] = false
+                it[Professor.username] = username
+                it[Professor.password] = password
+                it[Professor.type] = type
+                it[Professor.name] = name
+                it[Professor.surname] = surname
+                it[Professor.phone_number] = phone_number
+                it[Professor.email] = email
+                it[Professor.office] = office
+                it[Professor.is_associated] = is_associated
             }
         }
     }
 
-    fun getProfessor(): User? {
+    fun getProfessor(username:String): User? {
         return transaction {
-            Professor.select { Professor.username.eq("SalvadorUsername") }.map { rowToProfessor(it) }.singleOrNull()
+            Professor.select { Professor.username.eq(username) }.map { rowToProfessor(it) }.singleOrNull()
         }
     }
 
@@ -74,28 +103,38 @@ class UserDAO {
         var email = get[Professor.email]
         var office = get[Professor.office]
         var isAsociated = get[Professor.is_associated]
-        return mediatorCreation.buildUser(username, password, type, name, surname, phone_number, email, office, true, isAsociated)
+        return mediatorCreation.buildUser(
+            username,
+            password,
+            type,
+            name,
+            surname,
+            phone_number,
+            email,
+            office,
+            true,
+            isAsociated
+        )
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------
-    fun addStudent() {
+    fun addStudent(username:String,password:String,type:Int,name:String,surname:String,email:String,is_deputy:Boolean) {
         transaction {
             Student.insert {
-                it[Student.username] = "AlvaroUsername"
-                it[Student.password] = "Contrasenna de alvaro"
-                it[Student.type] = 1
-                it[Student.name] = "Alvaro"
-                it[Student.surname] = "Golbano Duran"
-                it[Student.email] = "alvaro.golbano@edu.uah.es"
-                it[Student.is_deputy] = true
-
+                it[Student.username] = username
+                it[Student.password] = password
+                it[Student.type] = type
+                it[Student.name] = name
+                it[Student.surname] = surname
+                it[Student.email] = email
+                it[Student.is_deputy] = is_deputy
             }
         }
     }
 
-    fun getStudent(): User? {
+    fun getStudent(username:String): User? {
         return transaction {
-            Student.select { Student.username.eq("AlvaroUsername") }.map { rowToStudent(it) }.singleOrNull()
+            Student.select { Student.username.eq(username) }.map { rowToStudent(it) }.singleOrNull()
         }
     }
 
@@ -115,9 +154,9 @@ class UserDAO {
         }
     }
 
-    fun deleteStudent() {
+    fun deleteStudent(username:String) {
         transaction {
-            Student.deleteWhere { Student.username.eq("AlvaroUsername") }
+            Student.deleteWhere { Student.username.eq(username) }
         }
     }
 
@@ -132,23 +171,34 @@ class UserDAO {
         var surname = get[Student.surname]
         var email = get[Student.email]
         var isDeputy = get[Student.is_deputy]
-        return mediatorCreation.buildUser(username, password, type, name, surname, "phone_number", email, "office", isDeputy, true)
+        return mediatorCreation.buildUser(
+            username,
+            password,
+            type,
+            name,
+            surname,
+            "phone_number",
+            email,
+            "office",
+            isDeputy,
+            true
+        )
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------
-    fun addAdmin() {
+    fun addAdmin(username:String,password:String,type:Int) {
         transaction {
             Admin.insert {
-                it[Admin.username] = "Admin"
-                it[Admin.password] = "root"
-                it[Admin.type] = 3
+                it[Admin.username] = username
+                it[Admin.password] = password
+                it[Admin.type] = type
             }
         }
     }
 
-    fun getAdmin(): User? {
+    fun getAdmin(username:String): User? {
         return transaction {
-            Admin.select { Admin.username.eq("Admin") }.map { rowToAdmin(it) }.singleOrNull()
+            Admin.select { Admin.username.eq(username) }.map { rowToAdmin(it) }.singleOrNull()
         }
     }
 
@@ -167,9 +217,9 @@ class UserDAO {
         }
     }
 
-    fun deleteAdmin() {
+    fun deleteAdmin(username: String) {
         transaction {
-            Admin.deleteWhere { Admin.username.eq("Admin") }
+            Admin.deleteWhere { Admin.username.eq(username) }
         }
     }
 
@@ -180,7 +230,18 @@ class UserDAO {
         var username = get[Admin.username]
         var password = get[Admin.password]
         var type = get[Admin.type]
-        return mediatorCreation.buildUser(username, password, type, "name", "surname", "phone_number", "email", "office", true, true)
+        return mediatorCreation.buildUser(
+            username,
+            password,
+            type,
+            "name",
+            "surname",
+            "phone_number",
+            "email",
+            "office",
+            true,
+            true
+        )
     }
 
 }

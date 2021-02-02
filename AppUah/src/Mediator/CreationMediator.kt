@@ -8,6 +8,7 @@ import ReservationFactoryMethod.ReservationFactory
 import RoomEntities.RoomInterface
 import RoomFactoryMethod.RoomFactory
 import RoomFactoryMethod.RoomType
+import java.time.LocalDateTime
 
 class CreationMediator : CreationMediatorInterface {
 
@@ -18,12 +19,11 @@ class CreationMediator : CreationMediatorInterface {
     private val FactoryClass = RoomFactory.getFactory(RoomType.CLASSROOM)
     val adapter = Adapter()
 
-    override fun createReserva(condition: String, id: Int, state: Boolean?, begin: String, end: String, room: RoomInterface): ReservationInterface {
-        // autogenerar uuid para el id
+    override fun createReserva(condition: String, id: String, state: Boolean?, begin: LocalDateTime, end: LocalDateTime, room: RoomInterface): ReservationInterface {
         return when (condition.toLowerCase()) {
-            "library" -> factoryLibrary!!.createReservation(1, adapter.adaptBooleanToState(state), begin, end, room)
-            "events" -> factoryEvents!!.createReservation(1, adapter.adaptBooleanToState(state), begin, end, room)
-            "subject" -> factorySubject!!.createReservation(1, adapter.adaptBooleanToState(state), begin, end, room)
+            "library" -> factoryLibrary!!.createReservation(id, adapter.adaptBooleanToState(state), begin, end, room)
+            "events" -> factoryEvents!!.createReservation(id, adapter.adaptBooleanToState(state), begin, end, room)
+            "subject" -> factorySubject!!.createReservation(id, adapter.adaptBooleanToState(state), begin, end, room)
             else -> throw Exception("Invalid document type")
         }
     }
@@ -51,9 +51,9 @@ class CreationMediator : CreationMediatorInterface {
             isAssociated: Boolean
     ): User {
         return when (type) {
-            1 -> UserBuilder.buildStudent(username, password, type, name, surname, email, isDeputy)
-            2 -> UserBuilder.buildProfessor(username, password, type, name, surname, phone_number,email, office, isAssociated)
-            3 -> UserBuilder.buildAdmin(username, password, type)
+            0 -> UserBuilder.buildStudent(username, password, type, name, surname, email, isDeputy)
+            1 -> UserBuilder.buildProfessor(username, password, type, name, surname, phone_number,email, office, isAssociated)
+            2 -> UserBuilder.buildAdmin(username, password, type)
             else -> throw Exception("Invalid document type")
         }
     }

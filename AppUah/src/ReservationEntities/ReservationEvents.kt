@@ -2,11 +2,12 @@ package ReservationEntities
 
 import RoomEntities.RoomInterface
 import State.ReservationState
+import java.time.LocalDateTime
 
-class ReservationEvents(override var id: Int,
+class ReservationEvents(override var id: String,
                         override var state: ReservationState,
-                        override var begin: String,
-                        override var end: String,
+                        override var begin: LocalDateTime,
+                        override var end: LocalDateTime,
                         override var room: RoomInterface): ReservationInterface {
 
     override fun toString(): String {
