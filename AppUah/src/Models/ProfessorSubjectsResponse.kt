@@ -1,4 +1,7 @@
 package com.appuah.Models
 
-class ProfessorSubjectsResponse {
-}
+data class ProfessorSubjectsResponse(
+    val gisi: ArrayList<String>?,
+    val gii: ArrayList<String>?,
+    val gic : ArrayList<String>?
+)

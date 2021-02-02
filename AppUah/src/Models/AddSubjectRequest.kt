@@ -1,4 +1,8 @@
 package com.appuah.Models
 
-class AddSubjectRequest {
-}
+data class AddSubjectRequest(
+    var username: String,
+    var plan: String,
+    var subjectCodes: String,
+    var type:Int
+)

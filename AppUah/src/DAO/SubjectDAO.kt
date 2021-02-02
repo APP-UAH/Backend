@@ -1,6 +1,11 @@
 package com.appuah.DAO
 
+import Tables.Professor
+import Tables.Student
 import com.appuah.Tables.ProfessorSubjects
+import com.appuah.Tables.ProfessorSubjects.code_subjects
+import com.appuah.Tables.ProfessorSubjects.plan_subjects
+import com.appuah.Tables.ProfessorSubjects.username_professor
 import com.appuah.Tables.StudentSubjects
 import com.appuah.Tables.Subjects
 import org.jetbrains.exposed.sql.*
@@ -16,6 +21,7 @@ class SubjectDAO {
 
 
         return transaction {
+
             Join(ProfessorSubjects,
                 Subjects,
                 onColumn = ProfessorSubjects.code_subjects,
@@ -28,6 +34,7 @@ class SubjectDAO {
                 }).selectAll()
                 .map { rowToSubject(it)!! }
         }
+
     }
 
     fun getStudentSubjects(username: String): List<String> {
@@ -38,15 +45,45 @@ class SubjectDAO {
                 Subjects,
                 onColumn = StudentSubjects.code_subjects,
                 otherColumn = Subjects.code,
-                joinType = JoinType.RIGHT,
-                additionalConstraint = { StudentSubjects.username_student.eq(username) }).selectAll()
+                joinType = JoinType.INNER,
+                additionalConstraint = {
+                    StudentSubjects.username_student.eq(username) and StudentSubjects.plan_subjects.eq(
+                        Subjects.plan
+                    )
+                }).selectAll()
                 .map { rowToSubject(it)!! }
+        }
+    }
+
+    fun getAllSubjects(): List<String> {
+        return transaction {
+            Subjects.selectAll().map { rowToSubject(it)!! }
+        }
+    }
+
+    fun addStudentSubjects(username: String, plan: String, code: String) {
+        transaction {
+            StudentSubjects.insert{
+                it[username_student] = username
+                it[code_subjects] = code
+                it[plan_subjects] = plan
+            }
+        }
+    }
+
+    fun addProfessorSubjects(username: String, plan: String, code: String) {
+        transaction {
+            ProfessorSubjects.insert{
+                it[username_professor] = username
+                it[code_subjects] = code
+                it[plan_subjects] = plan
+            }
         }
     }
 
     private fun rowToSubject(get: ResultRow): String? {
 
-        return get[Subjects.name]
+        return get[Subjects.name] + " , " + get[Subjects.plan] + " , " + get[Subjects.code]
     }
 
 
