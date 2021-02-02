@@ -6,7 +6,6 @@ import Routes.*
 import Singleton.DatabaseSingleton
 import io.ktor.application.*
 import io.ktor.response.*
-import io.ktor.request.*
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.locations.*
@@ -53,9 +52,6 @@ fun Application.module(testing: Boolean = false) {
       
         User(mediatorBehavior)
 
-        get("/json/gson") {
-            call.respond(mapOf("hello" to "world"))
-        }
     }
 }
 

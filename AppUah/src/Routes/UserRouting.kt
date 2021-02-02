@@ -9,6 +9,7 @@ import Models.UserRequest
 import Models.UserResponse
 import com.google.gson.Gson
 import io.ktor.application.call
+import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.*
@@ -36,9 +37,9 @@ fun Route.User(mediator: BehavioralMediator){
 
                 2-> mediator.usDAO.addAdmin(userRequest.username,userRequest.password,userRequest.type)
             }
-            call.respond(gson.toJson(UserResponse(true)))
+            call.respond(HttpStatusCode.Created, gson.toJson(UserResponse(true)))
         } catch (e: Exception){
-            call.respond(gson.toJson(UserResponse(false)))
+            call.respond(HttpStatusCode.InternalServerError, e)
         }
    }
 

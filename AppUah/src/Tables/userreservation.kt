@@ -3,7 +3,6 @@ package com.appuah.Tables
 import Tables.Reservation
 import Tables.Users
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ForeignKeyConstraint
 import org.jetbrains.exposed.sql.Table
 
 object userreservation : Table() {
