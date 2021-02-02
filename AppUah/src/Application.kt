@@ -2,8 +2,8 @@ package com.appuah
 
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
+import Routes.*
 import Singleton.DatabaseSingleton
-import com.appuah.Routes.reservation
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -48,6 +48,10 @@ fun Application.module(testing: Boolean = false) {
         }
 
         reservation(mediatorBehavior, mediatorCreation)
+      
+        login(mediatorBehavior)
+      
+        User(mediatorBehavior)
 
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))

@@ -99,19 +99,22 @@ class BehavioralMediator : BehavioralMediatorInterface {
         resDAO.deleteReservation(id)
     }
 
-    fun addUser(condition : String){
-        when (condition.toLowerCase()){
-            "student" -> usDAO.addStudent()
-            "professor" -> usDAO.addProfessor()
-            "admin" -> usDAO.addAdmin()
+    fun addUser(user:User){
+        when (user.type){
+            0 -> usDAO.addStudent(user.username!!,user.password!!,user.type!!,
+                user.name!!,user.surname!!,user.email!!, user.isDeputy!!)
+            1 -> usDAO.addProfessor(user.username!!,user.password!!,user.type!!,
+                user.name!!,user.surname!!,user.phone_number!!,user.email!!,
+                user.office!!,user.isAssociated!!)
+            2 -> usDAO.addAdmin(user.username!!,user.password!!,user.type!!)
         }
     }
 
-    fun getUser(condition: String) : User?{
+    fun getUser(condition: String, username:String) : User?{
         return when (condition.toLowerCase()){
-            "student" -> usDAO.getStudent()
-            "professor" -> usDAO.getProfessor()
-            "admin" -> usDAO.getAdmin()
+            "student" -> usDAO.getStudent(username)
+            "professor" -> usDAO.getProfessor(username)
+            "admin" -> usDAO.getAdmin(username)
             else -> null
         }
     }
