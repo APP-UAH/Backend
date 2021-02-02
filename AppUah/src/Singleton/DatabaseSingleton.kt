@@ -24,6 +24,7 @@ object DatabaseSingleton {
         props.setProperty("dataSource.user", username)
         props.setProperty("dataSource.password", password)
         props.setProperty("dataSource.databaseName", database)
+        props.setProperty("maximumPoolSize", "5")
         props.setProperty("dataSource.serverName", host)
         props["dataSource.logWriter"] = PrintWriter(System.out)
 

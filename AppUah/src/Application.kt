@@ -1,5 +1,6 @@
 package com.appuah
 
+
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
 import Routes.*
@@ -35,6 +36,7 @@ fun Application.module(testing: Boolean = false) {
         gson {
         }
     }
+    DatabaseSingleton.init()
 
     DatabaseSingleton.init()
     val mediatorBehavior = BehavioralMediator()
@@ -46,6 +48,7 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
+        subjects()
         reservation(mediatorBehavior, mediatorCreation)
       
         login(mediatorBehavior)
