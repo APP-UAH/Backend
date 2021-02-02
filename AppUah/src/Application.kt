@@ -40,6 +40,7 @@ fun Application.module(testing: Boolean = false) {
     DatabaseSingleton.init()
     val mediatorBehavior = BehavioralMediator()
     val mediatorCreation = CreationMediator()
+    init(mediatorCreation, mediatorBehavior)
 
     routing {
         get("/") {
@@ -56,3 +57,13 @@ fun Application.module(testing: Boolean = false) {
 
 const val API = "/AppUah"
 
+fun init(mediatorCreation : CreationMediator, mediatorBehavioral : BehavioralMediator){
+    var clase = mediatorCreation.createRoom("Subject", "NA8", 124)
+    mediatorBehavioral.addRoom(clase)
+    clase = mediatorCreation.createRoom("Subject", "SA8", 75)
+    mediatorBehavioral.addRoom(clase)
+    clase = mediatorCreation.createRoom("Library", "pequenia",2)
+    mediatorBehavioral.addRoom(clase)
+    clase = mediatorCreation.createRoom("Library", "Grande",6)
+    mediatorBehavioral.addRoom(clase)
+}

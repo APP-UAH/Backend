@@ -44,10 +44,10 @@ class BehavioralMediator : BehavioralMediatorInterface {
         while (iteratorRooms.hasNext()) {
             val tempRoom = iteratorRooms.next()
             if (tempRoom.name.equals(name)) {
-                if (tempRoom::class.equals("ClassRoom")){
-                    var room = ClassRoom(tempRoom.name, tempRoom.capacity)
+                if (tempRoom is ClassRoom){
+                    room = ClassRoom(tempRoom.name, tempRoom.capacity)
                 } else {
-                    var room = LibraryRoom(tempRoom.name, tempRoom.capacity)
+                    room = LibraryRoom(tempRoom.name, tempRoom.capacity)
                 }
             }
         }

@@ -13,15 +13,15 @@ class UserReservationDAO {
     fun addUserReservation(id: String, username: String){
         transaction {
             userreservation.insert {
-                it[id_Reservation] = id
-                it[username_Users] = username
+                it[id_reservation] = id
+                it[username_users] = username
             }
         }
     }
 
     fun getReservationId(username: String): List<String?>{
         return transaction {
-            userreservation.select { userreservation.username_Users.eq(username) }.map { rowToUserReservation(it) }
+            userreservation.select { userreservation.username_users.eq(username) }.map { rowToUserReservation(it) }
         }
     }
 
@@ -30,7 +30,7 @@ class UserReservationDAO {
             return null
         }
 
-        var id = get[userreservation.id_Reservation]
+        var id = get[userreservation.id_reservation]
 
 
         return id

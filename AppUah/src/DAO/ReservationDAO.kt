@@ -24,7 +24,7 @@ class ReservationDAO {
     fun addReservation(reserva : ReservationInterface, condition : String, username: String) {
         transaction {
             Reservation.insert {
-                it[state] = adapter.adaptStateToBoolean(reserva.state)
+                it[is_booked] = adapter.adaptStateToBoolean(reserva.state)
                 it[begin] = reserva.begin
                 it[end] = reserva.end
                 it[room] = reserva.room.name
@@ -40,22 +40,20 @@ class ReservationDAO {
     }
 
     fun getReservationByUsername(username : String): List<ReservationInterface?> {
-        return Join(Reservation, userreservation, onColumn = Reservation.id, otherColumn = userreservation.id_Reservation, joinType = JoinType.LEFT,
-            additionalConstraint = {userreservation.username_Users.eq(username)}).selectAll().map { rowToReservation(it)}
+        return transaction { Join(Reservation, userreservation, onColumn = Reservation.id, otherColumn = userreservation.id_reservation, joinType = JoinType.INNER,
+            additionalConstraint = {userreservation.username_users.eq(username)}).selectAll().map { rowToReservation(it)}}
     }
 
     fun getAllReservation(): List<ReservationInterface?> {
-        var res = List<ReservationInterface?>()
-        transaction {
-            res = Reservation.selectAll().map { rowToReservation(it) }
+        return transaction {
+            Reservation.selectAll().map { rowToReservation(it) }
         }
-        return res
     }
 
     fun updateReservation(newReserva : ReservationInterface, condition: String) {
         transaction {
             Reservation.update({ Reservation.id.eq(newReserva.id) }) {
-                it[state] = adapter.adaptStateToBoolean(newReserva.state)
+                it[is_booked] = adapter.adaptStateToBoolean(newReserva.state)
                 it[begin] = newReserva.begin
                 it[end] = newReserva.end
                 it[room] = newReserva.room.name
@@ -75,13 +73,14 @@ class ReservationDAO {
             return null
         }
 
-        return mediatorCreation.createReserva(
+        var reserva = mediatorCreation.createReserva(
                 get[Reservation.type],
                 get[Reservation.id],
-                get[Reservation.state],
+                get[Reservation.is_booked],
                 get[Reservation.begin],
                 get[Reservation.end],
                 mediatorBehaviour.getRoom(get[Reservation.room])!!)
+        return reserva
     }
 
 }

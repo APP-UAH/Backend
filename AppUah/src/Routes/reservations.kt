@@ -42,8 +42,8 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
 
     get<GetReservationByUsername>{
         val reservaRequest = call.receive<ReservationRequest>()
-        val id = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
-        val jsonString = Gson().toJson(id)
+        val reservas = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
+        val jsonString = Gson().toJson(reservas)
         call.respond(HttpStatusCode.Accepted,jsonString)
     }
 
