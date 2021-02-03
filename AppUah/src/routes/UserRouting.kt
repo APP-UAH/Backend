@@ -3,6 +3,8 @@ package routes
 import Mediator.BehavioralMediator
 
 import com.appuah.API
+import Models.LoginRequest
+import Models.LoginResponse
 import Models.UserRequest
 import Models.UserResponse
 import com.google.gson.Gson

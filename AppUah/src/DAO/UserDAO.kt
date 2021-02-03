@@ -10,13 +10,9 @@ import Builder.User
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class UserDAO {
-    var mediatorBehaviour: BehavioralMediator
+class UserDAO(mediator: BehavioralMediator) {
+    var mediatorBehaviour: BehavioralMediator = mediator
     val mediatorCreation = CreationMediator()
-
-    constructor(mediator: BehavioralMediator) {
-        this.mediatorBehaviour = mediator
-    }
 
     fun getUser(username: String): User? {
         return transaction {
@@ -28,9 +24,9 @@ class UserDAO {
         if (get == null) {
             return null
         }
-        var username = get[Users.username]
-        var password = get[Users.password]
-        var type = get[Users.type]
+        val username = get[Users.username]
+        val password = get[Users.password]
+        val type = get[Users.type]
         return mediatorCreation.buildUser(
             username,
             password,
@@ -94,15 +90,15 @@ class UserDAO {
         if (get == null) {
             return null
         }
-        var username = get[Professor.username]
-        var password = get[Professor.password]
-        var type = get[Professor.type]
-        var name = get[Professor.name]
-        var surname = get[Professor.surname]
-        var phone_number = get[Professor.phone_number]
-        var email = get[Professor.email]
-        var office = get[Professor.office]
-        var isAsociated = get[Professor.is_associated]
+        val username = get[Professor.username]
+        val password = get[Professor.password]
+        val type = get[Professor.type]
+        val name = get[Professor.name]
+        val surname = get[Professor.surname]
+        val phone_number = get[Professor.phone_number]
+        val email = get[Professor.email]
+        val office = get[Professor.office]
+        val isAsociated = get[Professor.is_associated]
         return mediatorCreation.buildUser(
             username,
             password,
@@ -164,13 +160,13 @@ class UserDAO {
         if (get == null) {
             return null
         }
-        var username = get[Student.username]
-        var password = get[Student.password]
-        var type = get[Student.type]
-        var name = get[Student.name]
-        var surname = get[Student.surname]
-        var email = get[Student.email]
-        var isDeputy = get[Student.is_deputy]
+        val username = get[Student.username]
+        val password = get[Student.password]
+        val type = get[Student.type]
+        val name = get[Student.name]
+        val surname = get[Student.surname]
+        val email = get[Student.email]
+        val isDeputy = get[Student.is_deputy]
         return mediatorCreation.buildUser(
             username,
             password,
@@ -211,8 +207,8 @@ class UserDAO {
     fun updateAdmins() {
         transaction {
             Admin.update({ Admin.username.eq("Admin") }) {
-                it[Admin.username] = "Nimda"
-                it[Admin.password] = "toor"
+                it[username] = "Nimda"
+                it[password] = "toor"
             }
         }
     }
@@ -227,9 +223,9 @@ class UserDAO {
         if (get == null) {
             return null
         }
-        var username = get[Admin.username]
-        var password = get[Admin.password]
-        var type = get[Admin.type]
+        val username = get[Admin.username]
+        val password = get[Admin.password]
+        val type = get[Admin.type]
         return mediatorCreation.buildUser(
             username,
             password,
