@@ -88,13 +88,9 @@ fun Route.subjects() {
 
     patch<AddSubject> {
         val addSubjectRequest = call.receive<AddSubjectRequest>()
-        try {
-            when (addSubjectRequest.type) {
-                0 -> SubjectDAO().deleteStudentSubject(addSubjectRequest.username)
-                1 -> SubjectDAO().deleteProfessorSubject(addSubjectRequest.username)
-            }
-        } catch (e: Exception) {
-            call.respond(HttpStatusCode.InternalServerError, e)
+        when (addSubjectRequest.type) {
+            0 -> SubjectDAO().deleteStudentSubject(addSubjectRequest.username)
+            1 -> SubjectDAO().deleteProfessorSubject(addSubjectRequest.username)
         }
         try {
             when (addSubjectRequest.type) {
