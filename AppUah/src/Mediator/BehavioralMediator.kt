@@ -155,4 +155,12 @@ class BehavioralMediator : BehavioralMediatorInterface {
         return resDAO.update(reserva, condition)
     }
 
+    fun getAllProfessors(): List<User?> {
+        return usDAO.getAllProfessors()
+    }
+
+    fun getAllStudents(): List<User?> {
+        return usDAO.getAllStudents()
+    }
+
 }

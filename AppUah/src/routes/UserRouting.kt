@@ -16,10 +16,15 @@ import io.ktor.response.*
 import io.ktor.routing.Route
 
 const val UserRoute = "$API/adduser"
+const val getUser = "$API/get-all-users"
 
 @KtorExperimentalLocationsAPI
 @Location(UserRoute)
 class doUser
+
+@KtorExperimentalLocationsAPI
+@Location(getUser)
+class getAllUser
 
 @KtorExperimentalLocationsAPI
 fun Route.User(mediator: BehavioralMediator){
@@ -37,10 +42,14 @@ fun Route.User(mediator: BehavioralMediator){
 
                 2-> mediator.usDAO.addAdmin(userRequest.username,userRequest.password,userRequest.type)
             }
-            call.respond(HttpStatusCode.Created, gson.toJson(UserResponse(true)))
+            call.respond(HttpStatusCode.Created, gson.toJson(true))
         } catch (e: Exception){
             call.respond(HttpStatusCode.InternalServerError, e)
         }
    }
+
+    get<getAllUser>{
+        call.respond(Gson().toJson(UserResponse(mediator.getAllStudents(), mediator.getAllProfessors())))
+    }
 
 }
