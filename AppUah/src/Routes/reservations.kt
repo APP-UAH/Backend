@@ -79,7 +79,7 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
                 mediatorBehaviour.getRoom(reservaRequest.room_name)!!
             )
             mediatorBehaviour.addReservationToDB(reserva, reservaRequest.type, reservaRequest.username)
-            mediatorBehaviour.addUserReservationToDB(newUUID, reservaRequest.username)
+            mediatorBehaviour.addUserReservationToDB(reserva.id, reservaRequest.username)
             if (!reservaRequest.type.toLowerCase().equals("library")){
                 mediatorBehaviour.addEventReservationToDB(newUUID)
                 if (!reservaRequest.type.toLowerCase().equals("events")){

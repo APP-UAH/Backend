@@ -4,18 +4,22 @@ import Adapter.Adapter
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
 import ReservationEntities.ReservationInterface
+import RoomEntities.RoomInterface
 import Tables.Reservation
 import com.appuah.Tables.userreservation
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.time.LocalDate
 
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 class ReservationDAO {
 
     var mediatorBehaviour: BehavioralMediator
     val mediatorCreation = CreationMediator()
     val adapter = Adapter()
+    val zone = ZoneId.of("Europe/Madrid")
 
     constructor(mediator: BehavioralMediator) {
         this.mediatorBehaviour = mediator
@@ -47,6 +51,15 @@ class ReservationDAO {
     fun getAllReservation(): List<ReservationInterface?> {
         return transaction {
             Reservation.selectAll().map { rowToReservation(it) }
+        }
+    }
+
+    fun getAllRoomsFromDB(begin: LocalDateTime, end: LocalDateTime): List<RoomInterface?> {
+        val beginDay = begin.toLocalDate().atStartOfDay()
+        val endDay = end.toLocalDate().atStartOfDay().plusDays(1).minusSeconds(1);
+        return transaction {
+            Reservation.select { Reservation.begin.between(beginDay, end) and Reservation.end.between(begin, endDay) }
+                    .map { rowToRoom(it) }
         }
     }
 
@@ -87,6 +100,14 @@ class ReservationDAO {
                 get[Reservation.end],
                 mediatorBehaviour.getRoom(get[Reservation.room])!!)
         return reserva
+    }
+
+    private fun rowToRoom(get: ResultRow?): RoomInterface?{
+        if (get == null) {
+            return null
+        }
+
+        return mediatorBehaviour.getRoom(get[Reservation.room])
     }
 
 }

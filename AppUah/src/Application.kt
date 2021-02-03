@@ -52,6 +52,8 @@ fun Application.module(testing: Boolean = false) {
       
         User(mediatorBehavior)
 
+        rooms(mediatorBehavior)
+
     }
 }
 

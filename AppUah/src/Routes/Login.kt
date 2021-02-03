@@ -38,6 +38,5 @@ fun Route.login(mediatorBehaviour: BehavioralMediator) {
         }catch (e: Exception){
             call.respond(e)
         }
-
     }
 }

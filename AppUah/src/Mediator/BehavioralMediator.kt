@@ -14,6 +14,7 @@ import State.StateNotProcessed
 import com.appuah.DAO.EventsReservationDAO
 import com.appuah.DAO.EventsSubjectsDAO
 import com.appuah.DAO.UserReservationDAO
+import java.time.LocalDateTime
 
 class BehavioralMediator : BehavioralMediatorInterface {
 
@@ -44,15 +45,46 @@ class BehavioralMediator : BehavioralMediatorInterface {
         while (iteratorRooms.hasNext()) {
             val tempRoom = iteratorRooms.next()
             if (tempRoom.name.equals(name)) {
-                if (tempRoom is ClassRoom){
-                    room = ClassRoom(tempRoom.name, tempRoom.capacity)
-                } else {
-                    room = LibraryRoom(tempRoom.name, tempRoom.capacity)
-                }
+                room = tempRoom
             }
         }
         iteratorRooms.index = 0
         return room
+    }
+
+    fun getAllRoomBetweenDate(begin: LocalDateTime, end: LocalDateTime, condition: String): ArrayList<RoomInterface> {
+        var rooms = resDAO.getAllRoomsFromDB(begin, end)
+        val newCollector = RoomListCollection()
+        newCollector.rooms.addAll(collectionRooms.rooms)
+        val newIterator = newCollector.createIterator()
+        if (condition.toLowerCase().equals("library")) {
+            while (newIterator.hasNext()) {
+                val tempRoom = newIterator.next()
+                if (tempRoom is LibraryRoom) {
+                    if (rooms.any { it?.name?.toLowerCase().equals(tempRoom.name.toLowerCase()) }) {
+                        newCollector.rooms.remove(tempRoom)
+                        newIterator.index = 0
+                    }
+                } else{
+                    newCollector.rooms.remove(tempRoom)
+                    newIterator.index = 0
+                }
+            }
+        } else {
+            while (newIterator.hasNext()) {
+                val tempRoom = newIterator.next()
+                if (tempRoom is ClassRoom) {
+                    if (rooms.any { it?.name?.toLowerCase().equals(tempRoom.name.toLowerCase()) }) {
+                        newCollector.rooms.remove(tempRoom)
+                        newIterator.index = 0
+                    }
+                } else {
+                    newCollector.rooms.remove(tempRoom)
+                    newIterator.index = 0
+                }
+            }
+        }
+        return newCollector.rooms
     }
 
     fun addReservationToDB(reserva : ReservationInterface, condition : String, username: String) {
@@ -70,10 +102,6 @@ class BehavioralMediator : BehavioralMediatorInterface {
     fun addEventsSubjectToDB(id_event: Int, code: String, plan: String){
         eventsSubDAO.addEvenSubject(id_event, code, plan)
     }
-
-    /*fun getReservationFromDB(id: String, username: String): List<ReservationInterface?> {
-        return resDAO.getReservation(id, username)
-    }*/
 
     fun getEventIdFromReservationId(id_res: String): Int?{
         return eventsResDAO.getEvent(id_res)
