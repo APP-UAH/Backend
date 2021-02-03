@@ -98,7 +98,7 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
         val reservaRequest = call.receive<ReservationRequest>()
         try {
             val newReserva = mediatorCreation.createReserva(
-                    reservaRequest.type,
+                    "Library",
                     reservaRequest.id,
                     reservaRequest.state,
                     LocalDateTime.parse(reservaRequest.begin),
@@ -109,7 +109,7 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
             if (reserva?.id.isNullOrEmpty()){
                 call.respond(HttpStatusCode.BadRequest, "La reserva no existe")
             } else {
-                mediatorBehaviour.updateReservation(newReserva, reservaRequest.type)
+                mediatorBehaviour.updateReservation(newReserva)
                 call.respond(HttpStatusCode.Accepted, "La reserva ha sido actualizada")
             }
 

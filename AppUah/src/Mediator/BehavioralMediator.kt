@@ -151,8 +151,8 @@ class BehavioralMediator : BehavioralMediatorInterface {
         return collectionRooms.rooms
     }
 
-    fun updateReservation(reserva : ReservationInterface, condition: String){
-        return resDAO.update(reserva, condition)
+    fun updateReservation(reserva : ReservationInterface){
+        return resDAO.update(reserva)
     }
 
     fun getAllProfessors(): List<User?> {
