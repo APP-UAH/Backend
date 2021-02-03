@@ -5,7 +5,8 @@ import com.appuah.DAO.SubjectDAO
 import com.appuah.Models.AddSubjectRequest
 import com.appuah.Models.ProfessorSubjectsResponse
 import com.appuah.Models.SubjectsRequest
-import com.appuah.Models.SubjectsResponse
+import Models.SubjectsResponse
+import com.appuah.Models.AllSubjectsResponse
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
