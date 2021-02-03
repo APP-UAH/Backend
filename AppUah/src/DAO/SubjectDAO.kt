@@ -55,6 +55,11 @@ class SubjectDAO {
         }
     }
 
+    fun getAllPlans():List<String>{
+        return transaction {
+            Subjects.selectAll().map { rowToSubjectPlans(it)!! }
+        }
+    }
     fun getAllSubjects(): List<String> {
         return transaction {
             Subjects.selectAll().map { rowToSubject(it)!! }
@@ -84,6 +89,11 @@ class SubjectDAO {
     private fun rowToSubject(get: ResultRow): String? {
 
         return get[Subjects.name] + " , " + get[Subjects.plan] + " , " + get[Subjects.code]
+    }
+
+    private fun rowToSubjectPlans(get: ResultRow): String? {
+
+        return get[Subjects.plan]
     }
 
 

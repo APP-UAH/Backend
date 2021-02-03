@@ -20,6 +20,12 @@ class UserDAO(mediator: BehavioralMediator) {
         }
     }
 
+    fun getAllUser():List<User?>{
+        return transaction {
+            Users.selectAll().map { rowToUser(it) }
+        }
+    }
+
     private fun rowToUser(get: ResultRow?): User? {
         if (get == null) {
             return null
