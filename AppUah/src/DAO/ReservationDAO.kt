@@ -69,14 +69,13 @@ class ReservationDAO {
         }
     }
 
-    fun update(newReserva : ReservationInterface, condition: String) {
+    fun update(newReserva : ReservationInterface) {
         transaction {
             Reservation.update({ Reservation.id.eq(newReserva.id) }) {
                 it[is_booked] = adapter.adaptStateToBoolean(newReserva.state)
                 it[begin] = newReserva.begin
                 it[end] = newReserva.end
                 it[room] = newReserva.room.name
-                it[type] = condition
             }
         }
     }

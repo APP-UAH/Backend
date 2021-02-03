@@ -1,3 +1,4 @@
+
 package routes
 
 import Mediator.BehavioralMediator
@@ -7,7 +8,6 @@ import Models.LoginRequest
 import Models.LoginResponse
 import Models.UserRequest
 import Models.UserResponse
-import com.appuah.Models.AllUsersResponse
 import com.google.gson.Gson
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -17,22 +17,20 @@ import io.ktor.response.*
 import io.ktor.routing.Route
 
 const val UserRoute = "$API/adduser"
-const val AllUsers = "$API/getAllUser"
+const val getUser = "$API/get-all-users"
 
 @KtorExperimentalLocationsAPI
 @Location(UserRoute)
 class doUser
 
 @KtorExperimentalLocationsAPI
-@Location(AllUsers)
-class allUser
-
+@Location(getUser)
+class getAllUser
 
 @KtorExperimentalLocationsAPI
 fun Route.User(mediator: BehavioralMediator){
     var gson = Gson()
-    post<doUser>{
-
+    post<doUser>{ 
         try {
             val userRequest = call.receive<UserRequest>()
             when(userRequest.type){
@@ -45,20 +43,13 @@ fun Route.User(mediator: BehavioralMediator){
 
                 2-> mediator.usDAO.addAdmin(userRequest.username,userRequest.password,userRequest.type)
             }
-            call.respond(HttpStatusCode.Created, gson.toJson(UserResponse(true)))
+            call.respond(HttpStatusCode.Created, gson.toJson(true))
         } catch (e: Exception){
             call.respond(HttpStatusCode.InternalServerError, e)
         }
-    }
-    get<allUser>{
-        try{
-            val allProfessors = mediator.usDAO.getAllProfessors()
-            val allStudents = mediator.usDAO.getAllStudents()
-            call.respond(gson.toJson(AllUsersResponse(allStudents,allProfessors)))
+   }
 
-        }catch (e: Exception){
-            call.respond(e)
-        }
+    get<getAllUser>{
+        call.respond(Gson().toJson(UserResponse(mediator.getAllStudents(), mediator.getAllProfessors())))
     }
-
 }

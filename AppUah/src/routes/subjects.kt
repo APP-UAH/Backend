@@ -1,9 +1,11 @@
 package routes
 
-import Models.SubjectsResponse
 import com.appuah.API
 import com.appuah.DAO.SubjectDAO
-import com.appuah.Models.*
+import com.appuah.Models.AddSubjectRequest
+import com.appuah.Models.ProfessorSubjectsResponse
+import com.appuah.Models.SubjectsRequest
+import com.appuah.Models.SubjectsResponse
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
@@ -17,7 +19,6 @@ const val subjects = "$API/subjects"
 const val allSubjects = "$subjects/allsubjects"
 const val addSubject = "$subjects/addsubjects"
 
-
 @KtorExperimentalLocationsAPI
 @Location(subjects)
 class SubjectsRoute
@@ -25,7 +26,6 @@ class SubjectsRoute
 @KtorExperimentalLocationsAPI
 @Location(allSubjects)
 class AllSubjectsRoute
-
 
 @KtorExperimentalLocationsAPI
 @Location(addSubject)
@@ -37,7 +37,6 @@ fun Route.subjects() {
     var gson = Gson()
     get<SubjectsRoute> {
         val user = call.receive<SubjectsRequest>()
-        // preguntar a dani un subject type o dos diferentes por cada usuario
         var subjects: List<String> = emptyList()
         when (user.type) {
             1 -> subjects = SubjectDAO().getProfessorSubjects(user.username)
@@ -66,7 +65,6 @@ fun Route.subjects() {
     }
 
     get<AllSubjectsRoute> {
-
             val allSubjects = SubjectDAO().getAllSubjects()
             val allSubjectsPlans= SubjectDAO().getAllPlans()
 
@@ -85,25 +83,37 @@ fun Route.subjects() {
             }
 
             call.respond(gson.toJson(AllSubjectsResponse(plans,subjects)))
-
     }
 
     patch<AddSubject> {
         val addSubjectRequest = call.receive<AddSubjectRequest>()
+        when (addSubjectRequest.type) {
+            0 -> SubjectDAO().deleteStudentSubject(addSubjectRequest.username)
+            1 -> SubjectDAO().deleteProfessorSubject(addSubjectRequest.username)
+        }
         try {
             when (addSubjectRequest.type) {
-                0 -> SubjectDAO().addStudentSubjects(
-                    addSubjectRequest.username,
-                    addSubjectRequest.plan, addSubjectRequest.subjectCodes
-                )
-                1 -> SubjectDAO().addProfessorSubjects(
-                    addSubjectRequest.username,
-                    addSubjectRequest.plan, addSubjectRequest.subjectCodes
-                )
+                0 -> while (addSubjectRequest.subjectCodes.isNotEmpty()) {
+                        SubjectDAO().addStudentSubjects(
+                            addSubjectRequest.username,
+                            addSubjectRequest.plan,
+                            addSubjectRequest.subjectCodes[0]
+                        )
+                        addSubjectRequest.subjectCodes.removeAt(0)
+                    }
+                1 -> while (addSubjectRequest.subjectCodes.isNotEmpty()) {
+                    SubjectDAO().addProfessorSubjects(
+                        addSubjectRequest.username,
+                        addSubjectRequest.plan,
+                        addSubjectRequest.subjectCodes[0]
+                    )
+                    addSubjectRequest.subjectCodes.removeAt(0)
+                }
             }
         } catch (e: Exception) {
             call.respond(HttpStatusCode.InternalServerError, e)
         }
     }
 }
+
 

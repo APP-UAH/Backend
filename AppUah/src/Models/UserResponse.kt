@@ -1,4 +1,8 @@
 package Models
 
-data class UserResponse(val result:Boolean) {
+import Builder.User
+
+data class UserResponse(
+    val students:List<User?>,
+    val professiors:List<User?>) {
 }

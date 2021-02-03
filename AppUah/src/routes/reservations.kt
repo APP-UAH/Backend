@@ -11,6 +11,7 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.Exception
 
@@ -74,8 +75,8 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
                 reservaRequest.type,
                 newUUID,
                 null,
-                reservaRequest.begin,
-                reservaRequest.end,
+                LocalDateTime.parse(reservaRequest.begin),
+                LocalDateTime.parse(reservaRequest.end),
                 mediatorBehaviour.getRoom(reservaRequest.room_name)!!
             )
             mediatorBehaviour.addReservationToDB(reserva, reservaRequest.type, reservaRequest.username)
@@ -97,18 +98,18 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
         val reservaRequest = call.receive<ReservationRequest>()
         try {
             val newReserva = mediatorCreation.createReserva(
-                    reservaRequest.type,
+                    "Library",
                     reservaRequest.id,
                     reservaRequest.state,
-                    reservaRequest.begin,
-                    reservaRequest.end,
+                    LocalDateTime.parse(reservaRequest.begin),
+                    LocalDateTime.parse(reservaRequest.end),
                     mediatorBehaviour.getRoom(reservaRequest.room_name)!!
             )
             var reserva = mediatorBehaviour.getReservationFromId(reservaRequest.id)
             if (reserva?.id.isNullOrEmpty()){
                 call.respond(HttpStatusCode.BadRequest, "La reserva no existe")
             } else {
-                mediatorBehaviour.updateReservation(newReserva, reservaRequest.type)
+                mediatorBehaviour.updateReservation(newReserva)
                 call.respond(HttpStatusCode.Accepted, "La reserva ha sido actualizada")
             }
 

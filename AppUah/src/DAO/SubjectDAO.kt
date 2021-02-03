@@ -86,6 +86,18 @@ class SubjectDAO {
         }
     }
 
+    fun deleteStudentSubject(username: String){
+        transaction {
+            StudentSubjects.deleteWhere { StudentSubjects.username_student.eq(username) }
+        }
+    }
+
+    fun deleteProfessorSubject(username: String){
+        transaction {
+            ProfessorSubjects.deleteWhere { ProfessorSubjects.username_professor.eq(username) }
+        }
+    }
+
     private fun rowToSubject(get: ResultRow): String? {
 
         return get[Subjects.name] + " , " + get[Subjects.plan] + " , " + get[Subjects.code]
