@@ -36,7 +36,6 @@ val gson = Gson()
 fun Route.subjects() {
     get<SubjectsRoute> {
         val user = call.receive<SubjectsRequest>()
-        // preguntar a dani un subject type o dos diferentes por cada usuario
         var subjects: List<String> = emptyList()
         when (user.type) {
             1 -> subjects = SubjectDAO().getProfessorSubjects(user.username)
@@ -91,14 +90,30 @@ fun Route.subjects() {
         val addSubjectRequest = call.receive<AddSubjectRequest>()
         try {
             when (addSubjectRequest.type) {
-                0 -> SubjectDAO().addStudentSubjects(
-                    addSubjectRequest.username,
-                    addSubjectRequest.plan, addSubjectRequest.subjectCodes
-                )
-                1 -> SubjectDAO().addProfessorSubjects(
-                    addSubjectRequest.username,
-                    addSubjectRequest.plan, addSubjectRequest.subjectCodes
-                )
+                0 -> SubjectDAO().deleteStudentSubject(addSubjectRequest.username)
+                1 -> SubjectDAO().deleteProfessorSubject(addSubjectRequest.username)
+            }
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.InternalServerError, e)
+        }
+        try {
+            when (addSubjectRequest.type) {
+                0 -> while (addSubjectRequest.subjectCodes.isNotEmpty()) {
+                        SubjectDAO().addStudentSubjects(
+                            addSubjectRequest.username,
+                            addSubjectRequest.plan,
+                            addSubjectRequest.subjectCodes[0]
+                        )
+                        addSubjectRequest.subjectCodes.removeAt(0)
+                    }
+                1 -> while (addSubjectRequest.subjectCodes.isNotEmpty()) {
+                    SubjectDAO().addProfessorSubjects(
+                        addSubjectRequest.username,
+                        addSubjectRequest.plan,
+                        addSubjectRequest.subjectCodes[0]
+                    )
+                    addSubjectRequest.subjectCodes.removeAt(0)
+                }
             }
         } catch (e: Exception) {
             call.respond(HttpStatusCode.InternalServerError, e)
