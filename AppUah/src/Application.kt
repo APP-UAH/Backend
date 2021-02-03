@@ -1,9 +1,8 @@
 package com.appuah
 
-
 import Mediator.BehavioralMediator
 import Mediator.CreationMediator
-import Routes.*
+import routes.*
 import Singleton.DatabaseSingleton
 import io.ktor.application.*
 import io.ktor.response.*
@@ -15,9 +14,9 @@ import io.ktor.gson.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+@KtorExperimentalLocationsAPI
 @Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
+fun Application.module() {
     install(Locations) {
     }
 
@@ -36,7 +35,6 @@ fun Application.module(testing: Boolean = false) {
         gson {
         }
     }
-    DatabaseSingleton.init()
 
     DatabaseSingleton.init()
     val mediatorBehavior = BehavioralMediator()
@@ -47,28 +45,23 @@ fun Application.module(testing: Boolean = false) {
         get("/") {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
-
         subjects()
         reservation(mediatorBehavior, mediatorCreation)
-      
         login(mediatorBehavior)
-      
         User(mediatorBehavior)
-
         rooms(mediatorBehavior)
-
     }
 }
 
 const val API = "/AppUah"
 
-fun init(mediatorCreation : CreationMediator, mediatorBehavioral : BehavioralMediator){
+fun init(mediatorCreation: CreationMediator, mediatorBehavioral: BehavioralMediator) {
     var clase = mediatorCreation.createRoom("Subject", "NA8", 124)
     mediatorBehavioral.addRoom(clase)
     clase = mediatorCreation.createRoom("Subject", "SA8", 75)
     mediatorBehavioral.addRoom(clase)
-    clase = mediatorCreation.createRoom("Library", "pequenia",2)
+    clase = mediatorCreation.createRoom("Library", "pequenia", 2)
     mediatorBehavioral.addRoom(clase)
-    clase = mediatorCreation.createRoom("Library", "Grande",6)
+    clase = mediatorCreation.createRoom("Library", "Grande", 6)
     mediatorBehavioral.addRoom(clase)
 }
