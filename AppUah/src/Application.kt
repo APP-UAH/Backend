@@ -36,7 +36,6 @@ fun Application.module(testing: Boolean = false) {
         gson {
         }
     }
-    DatabaseSingleton.init()
 
     DatabaseSingleton.init()
     val mediatorBehavior = BehavioralMediator()
