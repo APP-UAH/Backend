@@ -14,11 +14,11 @@ class Adapter {
         return (if (b == null) StateNotProcessed() else if (b) StateAccepted() else StateNotAccepted())
     }
 
-    fun adaptStateToBoolean(state : ReservationState?) : Boolean?{
+    fun adaptStateToBoolean(reservationState: ReservationState?) : Boolean?{
         //Null return StateNotProcessed
         //True StateAccepted
         //False StateNotAccepted
-        return (if (state!!.equals("Accepted")) true else if (state!!.equals("Not Accepted")) false else null)
+        return (if (reservationState!!.state.equals("Accepted")) true else if (reservationState.state.equals("Not accepted")) false else null)
     }
 
 }

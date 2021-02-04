@@ -1,3 +1,4 @@
+
 package routes
 
 import Mediator.BehavioralMediator
@@ -48,27 +49,27 @@ class UpdateReservation
 class DeleteReservation
 
 @KtorExperimentalLocationsAPI
-fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: CreationMediator){
-    get<ReservationsRoute>{
+fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: CreationMediator) {
+    get<ReservationsRoute> {
         val reservas = mediatorBehaviour.getAllReservationsFromDB()
         val jsonString = Gson().toJson(reservas)
-        call.respondText(jsonString,contentType = Json)
+        call.respondText(jsonString, contentType = Json)
     }
 
-    get<GetReservationByUsername>{
+    get<GetReservationByUsername> {
         val reservaRequest = call.receive<ReservationRequest>()
         val reservas = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
         val jsonString = Gson().toJson(reservas)
-        call.respondText(jsonString,contentType = Json)
+        call.respondText(jsonString, contentType = Json)
     }
 
-    get<GetPendingReservation>{
+    get<GetPendingReservation> {
         val reservas = mediatorBehaviour.getPendingReservation()
         val jsonString = Gson().toJson(reservas)
-        call.respondText(jsonString,contentType = Json)
+        call.respondText(jsonString, contentType = Json)
     }
 
-    post<CreateReservationRoute>{
+    post<CreateReservationRoute> {
         val reservaRequest = call.receive<ReservationRequest>()
         val newUUID = UUID.randomUUID().toString()
         try {
@@ -82,47 +83,51 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
             )
             mediatorBehaviour.addReservationToDB(reserva, reservaRequest.type, reservaRequest.username)
             mediatorBehaviour.addUserReservationToDB(reserva.id, reservaRequest.username)
-            if (!reservaRequest.type.toLowerCase().equals("library")){
+            if (!reservaRequest.type.toLowerCase().equals("library")) {
                 mediatorBehaviour.addEventReservationToDB(newUUID)
-                if (!reservaRequest.type.toLowerCase().equals("events")){
+                if (!reservaRequest.type.toLowerCase().equals("events")) {
                     val event_id = mediatorBehaviour.getEventIdFromReservationId(newUUID)
-                    mediatorBehaviour.addEventsSubjectToDB(event_id!!, reservaRequest.id_Subject, reservaRequest.plan_Subject)
+                    mediatorBehaviour.addEventsSubjectToDB(
+                        event_id!!,
+                        reservaRequest.id_Subject,
+                        reservaRequest.plan_Subject
+                    )
                 }
             }
-            call.respondText("La reserva se ha creado correctamente", )
-        } catch (e: Exception){
+            call.respondText("La reserva se ha creado correctamente",)
+        } catch (e: Exception) {
             call.respond(HttpStatusCode.InternalServerError, e)
         }
     }
 
-    patch<UpdateReservation>{
+    patch<UpdateReservation> {
         val reservaRequest = call.receive<ReservationRequest>()
         try {
             val newReserva = mediatorCreation.createReserva(
-                    "Library",
-                    reservaRequest.id,
-                    reservaRequest.state,
-                    LocalDateTime.parse(reservaRequest.begin),
-                    LocalDateTime.parse(reservaRequest.end),
-                    mediatorBehaviour.getRoom(reservaRequest.room_name)!!
+                "Library",
+                reservaRequest.id,
+                reservaRequest.state,
+                LocalDateTime.parse(reservaRequest.begin),
+                LocalDateTime.parse(reservaRequest.end),
+                mediatorBehaviour.getRoom(reservaRequest.room_name)!!
             )
             var reserva = mediatorBehaviour.getReservationFromId(reservaRequest.id)
-            if (reserva?.id.isNullOrEmpty()){
-                call.respondText( "La reserva no existe",contentType = ContentType.Text.Plain)
+            if (reserva?.id.isNullOrEmpty()) {
+                call.respondText("La reserva no existe", contentType = ContentType.Text.Plain)
             } else {
                 mediatorBehaviour.updateReservation(newReserva)
-                call.respondText( "La reserva ha sido actualizada",contentType = ContentType.Text.Plain)
+                call.respondText("La reserva ha sido actualizada", contentType = ContentType.Text.Plain)
             }
 
-        } catch (e: Exception){
+        } catch (e: Exception) {
             call.respond(HttpStatusCode.InternalServerError, e)
         }
     }
 
-    delete<DeleteReservation>{
+    delete<DeleteReservation> {
         val reservaRequest = call.receive<ReservationRequest>()
         mediatorBehaviour.deleteReservationFromDB(reservaRequest.id)
-        call.respondText( "Reserva borrada",contentType = ContentType.Text.Plain)
+        call.respondText("Reserva borrada", contentType = ContentType.Text.Plain)
     }
 
 }
