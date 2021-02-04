@@ -10,6 +10,7 @@ import com.appuah.Models.AllSubjectsResponse
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.http.ContentType.Application.Json
 import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -62,7 +63,7 @@ fun Route.subjects() {
             }
         }
         //println(ProfessorSubjectsResponse(gisi, gii, gic))
-        call.respond(HttpStatusCode.Accepted, gson.toJson(ProfessorSubjectsResponse(gisi, gii, gic)))
+        call.respondText(gson.toJson(ProfessorSubjectsResponse(gisi, gii, gic)),contentType = Json)
     }
 
     get<AllSubjectsRoute> {
@@ -83,7 +84,7 @@ fun Route.subjects() {
                 subjects.add(SubjectsResponse(nombre,plan,code))
             }
 
-            call.respond(gson.toJson(AllSubjectsResponse(plans,subjects)))
+            call.respondText(gson.toJson(AllSubjectsResponse(plans,subjects)),contentType = Json)
     }
 
     patch<AddSubject> {

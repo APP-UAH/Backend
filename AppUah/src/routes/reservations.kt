@@ -6,10 +6,11 @@ import com.appuah.API
 import com.appuah.Models.ReservationRequest
 import com.google.gson.Gson
 import io.ktor.application.call
-import io.ktor.http.HttpStatusCode
+import io.ktor.http.*
+import io.ktor.http.ContentType.Application.Json
 import io.ktor.locations.*
 import io.ktor.request.receive
-import io.ktor.response.respond
+import io.ktor.response.*
 import io.ktor.routing.Route
 import java.time.LocalDateTime
 import java.util.*
@@ -51,20 +52,20 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
     get<ReservationsRoute>{
         val reservas = mediatorBehaviour.getAllReservationsFromDB()
         val jsonString = Gson().toJson(reservas)
-        call.respond(HttpStatusCode.Accepted,jsonString)
+        call.respondText(jsonString,contentType = Json)
     }
 
     get<GetReservationByUsername>{
         val reservaRequest = call.receive<ReservationRequest>()
         val reservas = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
         val jsonString = Gson().toJson(reservas)
-        call.respond(HttpStatusCode.Accepted,jsonString)
+        call.respondText(jsonString,contentType = Json)
     }
 
     get<GetPendingReservation>{
         val reservas = mediatorBehaviour.getPendingReservation()
         val jsonString = Gson().toJson(reservas)
-        call.respond(HttpStatusCode.Accepted,jsonString)
+        call.respondText(jsonString,contentType = Json)
     }
 
     post<CreateReservationRoute>{
@@ -88,7 +89,7 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
                     mediatorBehaviour.addEventsSubjectToDB(event_id!!, reservaRequest.id_Subject, reservaRequest.plan_Subject)
                 }
             }
-            call.respond(HttpStatusCode.Created ,"La reserva se ha creado correctamente")
+            call.respondText("La reserva se ha creado correctamente", )
         } catch (e: Exception){
             call.respond(HttpStatusCode.InternalServerError, e)
         }
@@ -107,10 +108,10 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
             )
             var reserva = mediatorBehaviour.getReservationFromId(reservaRequest.id)
             if (reserva?.id.isNullOrEmpty()){
-                call.respond(HttpStatusCode.BadRequest, "La reserva no existe")
+                call.respondText( "La reserva no existe",contentType = ContentType.Text.Plain)
             } else {
                 mediatorBehaviour.updateReservation(newReserva)
-                call.respond(HttpStatusCode.Accepted, "La reserva ha sido actualizada")
+                call.respondText( "La reserva ha sido actualizada",contentType = ContentType.Text.Plain)
             }
 
         } catch (e: Exception){
@@ -121,7 +122,7 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
     delete<DeleteReservation>{
         val reservaRequest = call.receive<ReservationRequest>()
         mediatorBehaviour.deleteReservationFromDB(reservaRequest.id)
-        call.respond(HttpStatusCode.Accepted, "Reserva borrada")
+        call.respondText( "Reserva borrada",contentType = ContentType.Text.Plain)
     }
 
 }
