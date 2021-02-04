@@ -6,7 +6,8 @@ import Mediator.CreationMediator
 import ReservationEntities.ReservationInterface
 import RoomEntities.RoomInterface
 import Tables.Reservation
-import com.appuah.Tables.userreservation
+import com.appuah.Models.ReservationResponse
+import com.appuah.Tables.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDate
@@ -43,9 +44,9 @@ class ReservationDAO {
         }
     }
 
-    fun getReservationByUsername(username : String): List<ReservationInterface?> {
+    fun getReservationByUsername(username : String): List<ReservationResponse> {
         return transaction { Join(Reservation, userreservation, onColumn = Reservation.id, otherColumn = userreservation.id_reservation, joinType = JoinType.INNER,
-            additionalConstraint = {userreservation.username_users.eq(username)}).selectAll().map { rowToReservation(it)}}
+            additionalConstraint = {userreservation.username_users.eq(username)}).selectAll().map { ReservationResponse(rowToReservation(it), "")}}
     }
 
     fun getAllReservation(): List<ReservationInterface?> {
@@ -83,6 +84,22 @@ class ReservationDAO {
     fun deleteReservation(id: String) {
         transaction {
             Reservation.deleteWhere { Reservation.id.eq(id) }
+        }
+    }
+
+    fun getReservationBySubject(username: String) : List<ReservationResponse>{
+        return transaction {
+            Join(Reservation,
+                Join(events,
+                    Join(EventsSubjects,
+                        Join(Subjects,
+                            StudentSubjects, onColumn = Subjects.plan, otherColumn = StudentSubjects.plan_subjects,
+                                joinType = JoinType.INNER, additionalConstraint = { Subjects.code.eq(StudentSubjects.code_subjects) and StudentSubjects.username_student.eq(username)}
+                        ), onColumn = EventsSubjects.code_Subjects, otherColumn = Subjects.code, joinType = JoinType.INNER
+                    ), onColumn = events.id, otherColumn = EventsSubjects.id_Events, joinType = JoinType.INNER
+                ), onColumn = Reservation.id, otherColumn = events.id_Reservation, joinType = JoinType.INNER,
+                    additionalConstraint = { Reservation.is_booked.eq(true) }
+            ).selectAll().map { ReservationResponse(rowToReservation(it), it[Subjects.name]) }
         }
     }
 
