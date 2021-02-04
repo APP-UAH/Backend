@@ -19,9 +19,7 @@ class SubjectDAO {
     */
     fun getProfessorSubjects(username: String): List<String> {
 
-
         return transaction {
-
             Join(ProfessorSubjects,
                 Subjects,
                 onColumn = ProfessorSubjects.code_subjects,
@@ -38,7 +36,6 @@ class SubjectDAO {
     }
 
     fun getStudentSubjects(username: String): List<String> {
-
 
         return transaction {
             Join(StudentSubjects,
@@ -60,6 +57,7 @@ class SubjectDAO {
             Subjects.selectAll().map { rowToSubjectPlans(it)!! }
         }
     }
+
     fun getAllSubjects(): List<String> {
         return transaction {
             Subjects.selectAll().map { rowToSubject(it)!! }
@@ -107,6 +105,4 @@ class SubjectDAO {
 
         return get[Subjects.plan]
     }
-
-
 }
