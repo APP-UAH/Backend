@@ -78,9 +78,9 @@ fun Route.subjects() {
                 }
             }
             for(j in allSubjects){
-                val nombre = j.split(" ,")[0]
-                val plan = j.split(" ,")[1]
-                val code = j.split(" ,")[2]
+                val nombre = j.split(",")[0]
+                val plan = j.split(",")[1]
+                val code = j.split(",")[2]
                 subjects.add(SubjectsResponse(nombre,plan,code))
             }
 

@@ -98,7 +98,7 @@ class SubjectDAO {
 
     private fun rowToSubject(get: ResultRow): String? {
 
-        return get[Subjects.name] + " , " + get[Subjects.plan] + " , " + get[Subjects.code]
+        return get[Subjects.name] + "," + get[Subjects.plan] + "," + get[Subjects.code]
     }
 
     private fun rowToSubjectPlans(get: ResultRow): String? {
