@@ -14,6 +14,7 @@ import State.StateNotProcessed
 import com.appuah.DAO.EventsReservationDAO
 import com.appuah.DAO.EventsSubjectsDAO
 import com.appuah.DAO.UserReservationDAO
+import com.appuah.Models.ReservationResponse
 import java.time.LocalDateTime
 
 class BehavioralMediator : BehavioralMediatorInterface {
@@ -115,7 +116,7 @@ class BehavioralMediator : BehavioralMediatorInterface {
         return resDAO.getReservation(id)
     }
 
-    fun getReservationFromUsername(username: String): List<ReservationInterface?>{
+    fun getReservationFromUsername(username: String): List<ReservationResponse> {
         return resDAO.getReservationByUsername(username)
     }
 
@@ -149,6 +150,10 @@ class BehavioralMediator : BehavioralMediatorInterface {
 
     fun getAllRooms() : ArrayList<RoomInterface>{
         return collectionRooms.rooms
+    }
+
+    fun getReservationForStudents(username : String): List<ReservationResponse> {
+        return resDAO.getReservationBySubject(username)
     }
 
     fun updateReservation(reserva : ReservationInterface){

@@ -1,3 +1,4 @@
+
 package DAO
 
 import Mediator.BehavioralMediator
@@ -17,6 +18,12 @@ class UserDAO(mediator: BehavioralMediator) {
     fun getUser(username: String): User? {
         return transaction {
             Users.select { Users.username.eq(username) }.map { rowToUser(it) }.singleOrNull()
+        }
+    }
+
+    fun getAllUser():List<User?>{
+        return transaction {
+            Users.selectAll().map { rowToUser(it) }
         }
     }
 

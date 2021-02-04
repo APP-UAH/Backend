@@ -1,6 +1,6 @@
-package com.appuah.Models
+package Models
 
-data class SubjectsResponse(
-    val gisi: ArrayList<String>?,
-    val gii: ArrayList<String>?,
-    val gic : ArrayList<String>?)
+data class SubjectsResponse(val name:String,
+                            val plan:String,
+                            val code:String){}
+

@@ -20,5 +20,4 @@ class Adapter {
         //False StateNotAccepted
         return (if (ReservationState!!.state.toLowerCase().equals("accepted")) true else if (ReservationState!!.state.toLowerCase().equals("not accepted")) false else null)
     }
-
 }

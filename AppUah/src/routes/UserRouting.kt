@@ -1,3 +1,4 @@
+
 package routes
 
 import Mediator.BehavioralMediator
@@ -28,8 +29,8 @@ class getAllUser
 
 @KtorExperimentalLocationsAPI
 fun Route.User(mediator: BehavioralMediator){
-    post<doUser>{
-        var gson = Gson()
+    var gson = Gson()
+    post<doUser>{ 
         try {
             val userRequest = call.receive<UserRequest>()
             when(userRequest.type){
@@ -51,5 +52,4 @@ fun Route.User(mediator: BehavioralMediator){
     get<getAllUser>{
         call.respond(Gson().toJson(UserResponse(mediator.getAllStudents(), mediator.getAllProfessors())))
     }
-
 }

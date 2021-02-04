@@ -5,7 +5,8 @@ import com.appuah.DAO.SubjectDAO
 import com.appuah.Models.AddSubjectRequest
 import com.appuah.Models.ProfessorSubjectsResponse
 import com.appuah.Models.SubjectsRequest
-import com.appuah.Models.SubjectsResponse
+import Models.SubjectsResponse
+import com.appuah.Models.AllSubjectsResponse
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
@@ -30,10 +31,11 @@ class AllSubjectsRoute
 @KtorExperimentalLocationsAPI
 @Location(addSubject)
 class AddSubject
-val gson = Gson()
+
 
 @KtorExperimentalLocationsAPI
 fun Route.subjects() {
+    var gson = Gson()
     get<SubjectsRoute> {
         val user = call.receive<SubjectsRequest>()
         var subjects: List<String> = emptyList()
@@ -64,26 +66,24 @@ fun Route.subjects() {
     }
 
     get<AllSubjectsRoute> {
-        val allSubjects = SubjectDAO().getAllSubjects()
-        val gisi: ArrayList<String> = ArrayList()
-        val gic: ArrayList<String> = ArrayList()
-        val gii: ArrayList<String> = ArrayList()
+            val allSubjects = SubjectDAO().getAllSubjects()
+            val allSubjectsPlans= SubjectDAO().getAllPlans()
 
-        for (i in allSubjects) {
-            when {
-                i.contains("GISI") -> {
-                    gisi.add(i.split(" ,").get(0) + i.split(" ,")[2])
-                }
-                i.contains("GII") -> {
-                    gii.add(i.split(" ,").get(0) + i.split(" ,")[2])
-                }
-                else -> {
-                    gic.add(i.split(" ,").get(0) + i.split(" ,")[2])
+            val subjects: ArrayList<SubjectsResponse> = ArrayList()
+            val plans: ArrayList<String> = ArrayList()
+            for (i in allSubjectsPlans){
+                if(i !in plans){
+                    plans.add(i)
                 }
             }
-        }
-        val gson = Gson()
-        call.respond(HttpStatusCode.Accepted, gson.toJson(SubjectsResponse(gisi, gii, gic)))
+            for(j in allSubjects){
+                val nombre = j.split(" ,")[0]
+                val plan = j.split(" ,")[1]
+                val code = j.split(" ,")[2]
+                subjects.add(SubjectsResponse(nombre,plan,code))
+            }
+
+            call.respond(gson.toJson(AllSubjectsResponse(plans,subjects)))
     }
 
     patch<AddSubject> {
@@ -116,4 +116,5 @@ fun Route.subjects() {
         }
     }
 }
+
 

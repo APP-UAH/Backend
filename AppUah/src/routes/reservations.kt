@@ -11,6 +11,7 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import org.jetbrains.exposed.sql.appendTo
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.Exception
@@ -56,7 +57,8 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
 
     get<GetReservationByUsername>{
         val reservaRequest = call.receive<ReservationRequest>()
-        val reservas = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
+        var reservas = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
+        reservas = reservas + mediatorBehaviour.getReservationForStudents(reservaRequest.username)
         val jsonString = Gson().toJson(reservas)
         call.respond(HttpStatusCode.Accepted,jsonString)
     }
@@ -105,12 +107,15 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
                     LocalDateTime.parse(reservaRequest.end),
                     mediatorBehaviour.getRoom(reservaRequest.room_name)!!
             )
-            var reserva = mediatorBehaviour.getReservationFromId(reservaRequest.id)
+            val reserva = mediatorBehaviour.getReservationFromId(reservaRequest.id)
             if (reserva?.id.isNullOrEmpty()){
                 call.respond(HttpStatusCode.BadRequest, "La reserva no existe")
             } else {
                 mediatorBehaviour.updateReservation(newReserva)
-                call.respond(HttpStatusCode.Accepted, "La reserva ha sido actualizada")
+                if(reservaRequest.state == true)
+                    call.respond(HttpStatusCode.Accepted, "La reserva ha sido aceptada")
+                else
+                    call.respond(HttpStatusCode.Accepted, "La reserva ha sido denegada")
             }
 
         } catch (e: Exception){

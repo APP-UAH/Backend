@@ -10,7 +10,7 @@ class EventsSubjectsDAO {
         transaction {
             EventsSubjects.insert {
                 it[id_Events] = id
-                it[id_Subjects] = code
+                it[code_Subjects] = code
                 it[plan_Subjects] = plan
             }
         }

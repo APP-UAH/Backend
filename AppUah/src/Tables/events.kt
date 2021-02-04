@@ -6,6 +6,6 @@ import org.jetbrains.exposed.sql.Table
 object events : Table() {
 
     val id: Column<Int> = integer("id").autoIncrement()
-    val id_Reservation: Column<String> = text("id_Reservation")
+    val id_Reservation: Column<String> = text("id_reservation")
 
 }
