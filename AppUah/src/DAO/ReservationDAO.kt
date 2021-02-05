@@ -31,6 +31,7 @@ class ReservationDAO {
             Reservation.insert {
                 it[is_booked] = adapter.adaptStateToBoolean(reserva.state)
                 it[begin] = reserva.begin
+                it[id] = reserva.id
                 it[end] = reserva.end
                 it[room] = reserva.room.name
                 it[type] = condition
