@@ -47,6 +47,7 @@ class BehavioralMediator : BehavioralMediatorInterface {
             val tempRoom = iteratorRooms.next()
             if (tempRoom.name.equals(name)) {
                 room = tempRoom
+                break
             }
         }
         iteratorRooms.index = 0

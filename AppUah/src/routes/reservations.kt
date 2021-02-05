@@ -1,4 +1,3 @@
-
 package routes
 
 import Mediator.BehavioralMediator
@@ -87,16 +86,15 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
             mediatorBehaviour.addUserReservationToDB(reserva.id, reservaRequest.username)
             if (!reservaRequest.type.toLowerCase().equals("library")) {
                 mediatorBehaviour.addEventReservationToDB(newUUID)
-                if (!reservaRequest.type.toLowerCase().equals("events")) {
-                    val event_id = mediatorBehaviour.getEventIdFromReservationId(newUUID)
-                    mediatorBehaviour.addEventsSubjectToDB(
-                        event_id!!,
-                        reservaRequest.id_Subject,
-                        reservaRequest.plan_Subject
-                    )
-                }
+            } else if (!reservaRequest.type.toLowerCase().equals("events")) {
+                val event_id = mediatorBehaviour.getEventIdFromReservationId(newUUID)
+                mediatorBehaviour.addEventsSubjectToDB(
+                    event_id!!,
+                    reservaRequest.id_Subject,
+                    reservaRequest.plan_Subject
+                )
             }
-            call.respondText("La reserva se ha creado correctamente",)
+            call.respondText("La reserva se ha creado correctamente")
         } catch (e: Exception) {
             call.respond(HttpStatusCode.InternalServerError, e)
         }

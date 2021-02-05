@@ -37,7 +37,7 @@ class AddSubject
 @KtorExperimentalLocationsAPI
 fun Route.subjects() {
     var gson = Gson()
-    get<SubjectsRoute> {
+    post<SubjectsRoute> {
         val user = call.receive<SubjectsRequest>()
         var subjects: List<String> = emptyList()
         when (user.type) {
