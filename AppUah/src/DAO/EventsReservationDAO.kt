@@ -10,22 +10,22 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class EventsReservationDAO {
 
-    fun addEventReservation(id_res: String) {
+    fun addEventReservation(id: String, id_res: String) {
         transaction {
             events.insert {
-                it[id]
+                it[events.id] = id
                 it[id_Reservation] = id_res
             }
         }
     }
 
-    fun getEvent(id_res:String): Int?{
+    fun getEvent(id_res:String): String?{
         return transaction {
             events.select { events.id_Reservation.eq(id_res) }.map { rowToEvents(it) }
         }.get(0)
     }
 
-    private fun rowToEvents(get: ResultRow?): Int? {
+    private fun rowToEvents(get: ResultRow?): String? {
         if (get == null) {
             return null
         }

@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class EventsSubjectsDAO {
 
-    fun addEvenSubject(id: Int, code: String, plan: String){
+    fun addEvenSubject(id: String, code: String, plan: String){
         transaction {
             EventsSubjects.insert {
                 it[id_Events] = id
