@@ -96,8 +96,7 @@ class ReservationDAO {
                         Join(Subjects,
                             StudentSubjects, onColumn = Subjects.plan, otherColumn = StudentSubjects.plan_subjects,
                                 joinType = JoinType.INNER, additionalConstraint = { Subjects.code.eq(StudentSubjects.code_subjects) and StudentSubjects.username_student.eq(username)}
-                        ), onColumn = EventsSubjects.plan_Subjects, otherColumn = Subjects.plan, joinType = JoinType.INNER,
-                            additionalConstraint = { EventsSubjects.code_Subjects.eq(Subjects.code) }
+                        ), onColumn = EventsSubjects.code_Subjects, otherColumn = Subjects.code, joinType = JoinType.INNER
                     ), onColumn = events.id, otherColumn = EventsSubjects.id_Events, joinType = JoinType.INNER
                 ), onColumn = Reservation.id, otherColumn = events.id_Reservation, joinType = JoinType.INNER,
                     additionalConstraint = { Reservation.is_booked.eq(true) }
