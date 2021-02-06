@@ -30,7 +30,7 @@ class getAllUser
 
 @KtorExperimentalLocationsAPI
 fun Route.User(mediator: BehavioralMediator){
-    var gson = Gson()
+    val gson = Gson()
     post<doUser>{ 
         try {
             val userRequest = call.receive<UserRequest>()
