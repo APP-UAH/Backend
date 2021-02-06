@@ -112,6 +112,7 @@ fun Route.subjects() {
                     addSubjectRequest.subjectCodes.removeAt(0)
                 }
             }
+            call.respondText("La asignatura se ha asignado correctamente al usuario",)
         } catch (e: Exception) {
             call.respond(HttpStatusCode.InternalServerError, e)
         }
