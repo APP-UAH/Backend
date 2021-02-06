@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="AppUah" />
+        <module name="Backend" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="AppUah" target="1.8" />
+      <module name="Backend" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
