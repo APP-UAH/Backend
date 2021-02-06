@@ -6,9 +6,7 @@ import com.appuah.Models.RoomRequest
 import com.google.gson.Gson
 import io.ktor.application.call
 import io.ktor.http.ContentType.Application.Json
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
+import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.*
 import io.ktor.routing.Route
@@ -27,12 +25,12 @@ class GetAllLibraryRooms
 
 @KtorExperimentalLocationsAPI
 fun Route.rooms(mediatorBehaviour: BehavioralMediator) {
-    get<GetAllClassRooms>{
+    post<GetAllClassRooms>{
         var roomRequest = call.receive<RoomRequest>()
         call.respondText(Gson().toJson(mediatorBehaviour.getAllRoomBetweenDate(LocalDateTime.parse(roomRequest.begin), LocalDateTime.parse(roomRequest.end), "Classroom")),contentType = Json)
     }
 
-    get<GetAllLibraryRooms>{
+    post<GetAllLibraryRooms>{
         var roomRequest = call.receive<RoomRequest>()
         call.respondText(Gson().toJson(mediatorBehaviour.getAllRoomBetweenDate(LocalDateTime.parse(roomRequest.begin), LocalDateTime.parse(roomRequest.end), "Library")),contentType = Json)
     }

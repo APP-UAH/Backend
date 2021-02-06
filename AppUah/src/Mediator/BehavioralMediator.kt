@@ -16,6 +16,8 @@ import com.appuah.DAO.EventsSubjectsDAO
 import com.appuah.DAO.UserReservationDAO
 import com.appuah.Models.ReservationResponse
 import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class BehavioralMediator : BehavioralMediatorInterface {
 
@@ -38,6 +40,7 @@ class BehavioralMediator : BehavioralMediatorInterface {
             val tempRoom = iteratorRooms.next()
             if (tempRoom.name.equals(name)) {
                 room = tempRoom
+                break
             }
         }
         iteratorRooms.index = 0
@@ -88,14 +91,14 @@ class BehavioralMediator : BehavioralMediatorInterface {
     }
 
     fun addEventReservationToDB(id_res: String){
-        eventsResDAO.addEventReservation(id_res)
+        eventsResDAO.addEventReservation(UUID.randomUUID().toString(), id_res)
     }
 
-    fun addEventsSubjectToDB(id_event: Int, code: String, plan: String){
+    fun addEventsSubjectToDB(id_event: String, code: String, plan: String){
         eventsSubDAO.addEvenSubject(id_event, code, plan)
     }
 
-    fun getEventIdFromReservationId(id_res: String): Int?{
+    fun getEventIdFromReservationId(id_res: String): String?{
         return eventsResDAO.getEvent(id_res)
     }
 

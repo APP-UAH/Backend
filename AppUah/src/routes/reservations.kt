@@ -13,7 +13,6 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.*
 import io.ktor.routing.Route
-import org.jetbrains.exposed.sql.appendTo
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.Exception
@@ -57,7 +56,7 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
         call.respondText(jsonString, contentType = Json)
     }
 
-    get<GetReservationByUsername> {
+    post<GetReservationByUsername> {
         val reservaRequest = call.receive<ReservationRequest>()
         var reservas = mediatorBehaviour.getReservationFromUsername(reservaRequest.username)
         reservas = reservas + mediatorBehaviour.getReservationForStudents(reservaRequest.username)
