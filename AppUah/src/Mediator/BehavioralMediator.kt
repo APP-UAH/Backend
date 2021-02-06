@@ -30,15 +30,6 @@ class BehavioralMediator : BehavioralMediatorInterface {
     val eventsResDAO = EventsReservationDAO()
     val eventsSubDAO = EventsSubjectsDAO()
 
-    override fun changeState(condition: String, reserva: ReservationInterface) {
-        when (condition.toLowerCase()) {
-            "accepted" -> reserva.state = StateAccepted()
-            "not proccessed" -> reserva.state = StateNotProcessed()
-            "not accepted" -> reserva.state = StateNotAccepted()
-            else -> throw Exception("Invalid document type")
-        }
-    }
-
     override fun addRoom(room: RoomInterface) {
         collectionRooms.add(room)
     }
