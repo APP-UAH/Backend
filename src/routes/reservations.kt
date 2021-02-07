@@ -112,12 +112,15 @@ fun Route.reservation(mediatorBehaviour: BehavioralMediator, mediatorCreation: C
                 LocalDateTime.parse(reservaRequest.end),
                 mediatorBehaviour.getRoom(reservaRequest.room_name)!!
             )
-            var reserva = mediatorBehaviour.getReservationFromId(reservaRequest.id)
+            val reserva = mediatorBehaviour.getReservationFromId(reservaRequest.id)
             if (reserva?.id.isNullOrEmpty()) {
                 call.respondText("La reserva no existe", contentType = ContentType.Text.Plain)
             } else {
                 mediatorBehaviour.updateReservation(newReserva)
-                call.respondText("La reserva ha sido actualizada", contentType = ContentType.Text.Plain)
+                if(reservaRequest.state == true)
+                    call.respondText("La reserva ha sido aceptada", contentType = ContentType.Text.Plain)
+                else
+                    call.respondText("La reserva ha sido denegada", contentType = ContentType.Text.Plain)
             }
 
         } catch (e: Exception) {
